@@ -1,0 +1,9 @@
+name = "TVDAlgorithm"
+uuid = "8938f082-1acf-4b9d-9b0b-05ea3602597a"
+authors = ["James Kerlidis"]
+version = "0.1.0"
+
+[deps]
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
