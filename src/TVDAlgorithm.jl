@@ -7,7 +7,8 @@ export
     index_position,
     position_index,
     kahan_sum,
-    k_step_transition_probabilities
+    k_step_transition_probabilities,
+    exact_tvd_algorithm
 
 include("exact_tvd_algorithm.jl")
 
