@@ -1,6 +1,9 @@
 # An implementation of the Kahan compensated summation algorithm, to minimise
 # the impact of floating-point-error when summing many floats
-function kahan_sum(summands::Array{T})::T where {T}
+function kahan_sum(
+    summands::Array{T}
+)::T where {T<:Number}
+
     sum = 0.0
     compensator = 0.0
 

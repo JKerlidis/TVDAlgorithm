@@ -2,7 +2,12 @@
 # to a tuple representing its position in the tensor. If n==3 and d==3, then
 # an index of 11 will return (2, 1, 2), because 11 is in the second row, first
 # column, and at depth one in the 3-tensor.
-function index_position(index::Integer, n::Integer, d::Integer)::Tuple
+function index_position(
+    index::Integer,
+    n::Integer,
+    d::Integer
+)::Tuple
+
     (index ≤ 0 || index > n^d) && throw(DomainError(index, "argument must be within range [1, nᵈ]"))
     n ≤ 0 && throw(DomainError(n, "argument must be positive"))
     if d ≤ 0
@@ -26,7 +31,12 @@ end
 # Convert a position in a d-tensor with each dimension containing n elements
 # into its corresponding index. If n==3 and d==3, then a position of (2, 1, 2)
 # will return 11, as (2, 1, 2) is the 11th indexed element in the tensor.
-function position_index(position::Tuple, n::Integer, d::Integer)::Integer
+function position_index(
+    position::Tuple,
+    n::Integer,
+    d::Integer
+)::Integer
+
     length(position) == d || throw(DimensionMismatch("length of the position tuple must equal d"))
     n ≤ 0 && throw(DomainError(n, "argument must be positive"))
     d ≤ 0 && throw(DomainError(d, "argument must be postive"))
@@ -42,7 +52,11 @@ end
 # Given a square matrix of transition probabilities for a homogeneous Markov
 # chain, produce an (k+1)-tensor listing the probabilites of each path of
 # length k (i.e. the k-step transition probabilities).
-function k_step_transition_probabilities(k::Integer, P::Array{Float64,2})::Array{Float64}
+function k_step_transition_probabilities(
+    k::Integer,
+    P::Array{Float64,2}
+)::Array{Float64}
+
     size(P, 1) ≠ size(P, 2) && throw(DimensionMismatch("P should be a square matrix"))
     k < 1 && throw(DomainError(k, "number of steps should be positive"))
 
@@ -70,7 +84,13 @@ end
 # variation distance between them for paths of length k, for a given initial
 # state p₀. The path space quickly becomes large as k increases, which can
 # cause memory issues with large path lengths
-function exact_tvd(p₀::Integer, k::Integer, P::Array{Float64,2}, Q::Array{Float64,2})
+function exact_tvd(
+    p₀::Integer,
+    k::Integer,
+    P::Array{Float64,2},
+    Q::Array{Float64,2}
+)::Float64
+
     size(P) ≠ size(Q) && throw(DimensionMismatch("P and Q do not have the same state space"))
     size(P, 1) ≠ size(P, 2) && throw(DimensionMismatch("P and Q are not square matrices"))
     (p₀ < 0 || p₀ ≥ size(P, 1)) && throw(DomainError("p₀ should be in the range [0, √|P| - 1]"))

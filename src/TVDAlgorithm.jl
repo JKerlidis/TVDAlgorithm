@@ -1,6 +1,6 @@
 module TVDAlgorithm
 
-import Random
+using Random
 
 export
     # Compensated summation
@@ -10,9 +10,10 @@ export
     index_position,
     position_index,
     k_step_transition_probabilities,
-    exact_tvd
+    exact_tvd,
 
-# Approximate TVD algorithm
+    # Approximate TVD algorithm
+    simulate_coupling_probability
 
 include("compensated_summation.jl")
 include("exact_tvd_algorithm.jl")
