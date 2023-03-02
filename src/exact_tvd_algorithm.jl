@@ -65,25 +65,6 @@ function k_step_transition_probabilities(k::Integer, P::Array{Float64,2})::Array
     k_step_probabilities
 end
 
-# An implementation of the Kahan compensated summation algorithm, to minimise
-# the impact of floating-point-error when summing many floats
-function kahan_sum(summands::Array{T})::T where {T}
-    sum = 0.0
-    compensator = 0.0
-
-    for s ∈ summands
-        t = sum + s
-        if abs(sum) ≥ abs(s)
-            compensator += (sum - t) + s
-        else
-            compensator += (s - t) + sum
-        end
-        sum = t
-    end
-
-    sum + compensator
-end
-
 # Given two homogeneous Markov processes with the same finite state space and
 # transition probability matrices P and Q respectively, calculate the total
 # variation distance between them for paths of length k, for a given initial
