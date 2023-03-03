@@ -18,6 +18,11 @@ end
     @test position_index((2, 1, 1, 3), 3, 4) == 56
 end
 
+@testset "Test kahan_sum function" begin
+    @test kahan_sum([1, 2, 3, 4]) == 10
+    @test kahan_sum(repeat([1 / 700, 3 / 700], 2100)) == 12.0
+end
+
 @testset "Test exact_tvd function" begin
     unif_probs = [0.25 for r ∈ 0:3, c ∈ 0:3]
     bin_probs = [Distributions.pdf(Distributions.Binomial(3, 0.5), c) for r ∈ 0:3, c ∈ 0:3]

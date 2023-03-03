@@ -1,3 +1,17 @@
+# A representation of a representation that can be censored, i.e. the value may
+# lie beyond the calculated range
+struct CensoredObservation
+    v::Float64 # Observed value
+    c::Int  # Censoring flag
+end
+
+function Base.:+(
+    x::CensoredObservation,
+    y::CensoredObservation,
+)::CensoredObservation
+    CensoredObservation(x.v + y.v, x.c + y.c)
+end
+
 # Given two homogeneous Markov processes with (possibly truncated) transition
 # probabilities P and Q respectively, which are defined on the same state
 # space and start from state p₀, simulate a path of length k from the process
@@ -9,10 +23,12 @@ function simulate_coupling_probability(
     k::Integer,
     P::Array{Float64,2},
     Q::Array{Float64,2}
-)::Float64
+)::CensoredObservation
 
     size(P) ≠ size(Q) && throw(DimensionMismatch("P and Q do not have the same state space"))
     size(P, 1) ≠ size(P, 2) && throw(DimensionMismatch("P and Q are not square matrices"))
+    (p₀ < 0 || p₀ ≥ size(P, 1)) && throw(DomainError(p₀, "argument should be in the range [0, √|P| - 1]"))
+    k ≥ 1 || throw(DomainError(k, "path length must be at least one"))
 
     transition_quantiles = rand(rng, k)
     transition_indices = Array{Int}(undef, k + 1)
@@ -20,13 +36,17 @@ function simulate_coupling_probability(
 
     for n ∈ 1:k
         cumulative_prob = 0.0
-        for i ∈ 1:length(P[transition_indices[n], :])
-            cumulative_prob += P[transition_indices[n], i] # TODO: change this to a compensated sum
+        for i ∈ 1:size(P, 1)
+            cumulative_prob += P[transition_indices[n], i]
             if transition_quantiles[n] ≤ cumulative_prob
                 transition_indices[n+1] = i
                 break
+            elseif i == size(P, 1)
+                # Early return if P has been truncated to before the desired quantile,
+                # indicating the data is censored
+                return CensoredObservation(0, 1)
             end
-            # TODO: add a condition for if P has been truncated to before transition_quantiles[n]
+
         end
     end
 
@@ -38,5 +58,32 @@ function simulate_coupling_probability(
         Q_path_prob *= Q[transition_indices[i], transition_indices[i+1]]
     end
 
-    max((P_path_prob - Q_path_prob) / P_path_prob, 0) # TODO: avoid divide by zero errors
+    if P_path_prob == 0
+        return CensoredObservation(0, 0)
+    else
+        return CensoredObservation(max((P_path_prob - Q_path_prob) / P_path_prob, 0), 0)
+    end
+end
+
+# Given two homogeneous Markov processes with (possibly truncated) transition
+# probabilities P and Q respectively, which are defined on the same state
+# space and start from state p₀, simulate the total variation distance between
+# them for paths of length k, for a given number of trials.
+function approximate_tvd(
+    rng::AbstractRNG,
+    num_trials::Integer,
+    p₀::Integer,
+    k::Integer,
+    P::Array{Float64,2},
+    Q::Array{Float64,2}
+)::Float64
+
+    num_trials ≥ 1 || throw(DomainError(num_trials, "there must be at least one trial"))
+
+    accumulator = CensoredObservation(0, 0)
+    for i ∈ 1:num_trials
+        accumulator += simulate_coupling_probability(rng, p₀, k, P, Q)
+    end
+
+    accumulator.v / (num_trials - accumulator.c)
 end

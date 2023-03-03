@@ -2,7 +2,6 @@ using TVDAlgorithm
 using Test
 
 const tests = [
-    "test_compensated_summation",
     "test_exact_tvd_algorithm",
     "test_approximate_tvd_algorithm"
 ]
