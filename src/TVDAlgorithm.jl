@@ -16,7 +16,11 @@ export
     # Approximate TVD algorithm
     CensoredObservation,
     simulate_coupling_probability,
-    approximate_tvd
+    approximate_tvd,
+
+    # Branching processes
+    CBPCarryingCapacityBinomial,
+    PSDBPCarryingCapacityNegativeBinomial
 
 include("helpers.jl")
 include("exact_tvd_algorithm.jl")
