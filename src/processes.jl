@@ -24,15 +24,19 @@ struct CBPCarryingCapacityBinomial
 
         P = Array{Float64}(undef, max_z + 1, max_z + 1)
 
-        for z ∈ 0:max_z, c ∈ 0:max_z
-            if z == 0
-                P[z+1, c+1] = c == 0 ? 1 : 0
-            else
-                P[z+1, c+1] = sum(
-                    i -> Distributions.pdf(Distributions.Binomial(z + K, p(z)), i) *
-                         Distributions.pdf(Distributions.Binomial(m * i, q), c),
-                    0:(z+K)
-                )
+        for z ∈ 0:max_z
+            for c ∈ 0:max_z
+                row_dist = Distributions.Binomial(z + K, p(z))
+
+                if z == 0
+                    P[z+1, c+1] = c == 0 ? 1 : 0
+                else
+                    P[z+1, c+1] = sum(
+                        i -> Distributions.pdf(row_dist, i) *
+                             Distributions.pdf(Distributions.Binomial(m * i, q), c),
+                        0:(z+K)
+                    )
+                end
             end
         end
 
