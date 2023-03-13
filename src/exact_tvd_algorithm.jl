@@ -31,10 +31,10 @@ end
 # Given two homogeneous Markov processes with the same finite state space and
 # transition probability matrices P and Q respectively, calculate the total
 # variation distance between them for paths of length k, for a given initial
-# state p₀. The path space quickly becomes large as k increases, which can
+# state z₀. The path space quickly becomes large as k increases, which can
 # cause memory issues with large path lengths
 function exact_tvd(
-    p₀::Integer,
+    z₀::Integer,
     k::Integer,
     P::Array{Float64,2},
     Q::Array{Float64,2}
@@ -42,7 +42,7 @@ function exact_tvd(
 
     size(P) ≠ size(Q) && throw(DimensionMismatch("P and Q do not have the same state space"))
     size(P, 1) ≠ size(P, 2) && throw(DimensionMismatch("P and Q are not square matrices"))
-    (p₀ < 0 || p₀ ≥ size(P, 1)) && throw(DomainError("p₀ should be in the range [0, √|P| - 1]"))
+    (z₀ < 0 || z₀ ≥ size(P, 1)) && throw(DomainError("z₀ should be in the range [0, √|P| - 1]"))
 
     n = size(P, 1)
 
@@ -51,8 +51,8 @@ function exact_tvd(
         k_step_transition_probabilities(k, Q)
     )
 
-    p₀_path_min_probs = min_k_step_probs[1:n:n^(k+1)]
-    tvd = 1 - kahan_sum(p₀_path_min_probs)
+    z₀_path_min_probs = min_k_step_probs[1:n:n^(k+1)]
+    tvd = 1 - kahan_sum(z₀_path_min_probs)
 
     tvd
 end

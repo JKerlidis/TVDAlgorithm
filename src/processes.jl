@@ -73,7 +73,7 @@ struct PSDBPCarryingCapacityNegativeBinomial
 
         p(z) = ((m - 1)K) / ((m - 2)z + m * K)
         ξ(z) = Distributions.NegativeBinomial(
-            (z + K) * m * p(z) / (z * (m * (1 - p(z)) - 1)),
+            z * (z + K) * m * p(z) / (z * (m * (1 - p(z)) - 1)),
             1 / (1 + q * (m - 1 - m * p(z)))
         )
 
