@@ -15,8 +15,12 @@ export
 
     # Approximate TVD algorithm
     CensoredObservation,
+    TVDSimulationOutput,
+    TVDSimulationSummary,
+    summarise,
     simulate_coupling_probability,
     approximate_tvd,
+    approximate_tvd_extended_output,
 
     # Branching processes
     CBPCarryingCapacityBinomial,

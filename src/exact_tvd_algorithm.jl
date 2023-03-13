@@ -3,7 +3,7 @@
 # length k (i.e. the k-step transition probabilities).
 function k_step_transition_probabilities(
     k::Integer,
-    P::Array{Float64,2}
+    P::Matrix{Float64}
 )::Array{Float64}
 
     size(P, 1) ≠ size(P, 2) && throw(DimensionMismatch("P should be a square matrix"))
@@ -36,8 +36,8 @@ end
 function exact_tvd(
     z₀::Integer,
     k::Integer,
-    P::Array{Float64,2},
-    Q::Array{Float64,2}
+    P::Matrix{Float64},
+    Q::Matrix{Float64}
 )::Float64
 
     size(P) ≠ size(Q) && throw(DimensionMismatch("P and Q do not have the same state space"))
