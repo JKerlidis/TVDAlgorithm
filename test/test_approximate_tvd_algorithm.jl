@@ -9,10 +9,6 @@ rng = Random.Xoshiro(1)
 unif_probs = [0.25 for r ∈ 0:3, c ∈ 0:3]
 bin_probs = [0.125 0.375 0.375 0.125; 0.25 0.25 0.25 0.25; 0.25 0.25 0.25 0.25; 0.125 0.375 0.375 0.125]
 
-@testset "Test CensoredObservation" begin
-    @test CensoredObservation(3, 1) + CensoredObservation(5, 0) == CensoredObservation(8, 1)
-end
-
 @testset "Test simulate_coupling_probability function" begin
     @test_throws DimensionMismatch simulate_coupling_probability(
         rng, 1, 10, unif_probs, [0.25 for r ∈ 0:4, c ∈ 0:3]

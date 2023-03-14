@@ -70,3 +70,17 @@ function kahan_sum(
 
     sum + compensator
 end
+
+# A representation of a representation that can be censored, i.e. the value may
+# lie beyond the calculated range
+struct CensoredObservation
+    v::Float64 # Observed value
+    c::Int  # Censoring flag
+end
+
+function Base.:+(
+    x::CensoredObservation,
+    y::CensoredObservation,
+)::CensoredObservation
+    CensoredObservation(x.v + y.v, x.c + y.c)
+end

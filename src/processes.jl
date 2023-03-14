@@ -7,7 +7,7 @@ struct CBPCarryingCapacityBinomial
     m::Integer
     q::Float64
     max_z::Integer
-    P::Array{Float64,2}
+    P::Matrix{Float64}
 
     function CBPCarryingCapacityBinomial(
         K::Integer,
@@ -18,7 +18,7 @@ struct CBPCarryingCapacityBinomial
         K ≥ 0 || throw(DomainError(K, "argument must be non-negative"))
         m ≥ 2 || throw(DomainError(m, "argument must have a value of at least 2"))
         zero(q) ≤ q ≤ one(q) || throw(DomainError(q, "argument must be in the range [0,1]"))
-        max_z > 0 || throw(DomainError(max_z, "argument must be positive"))
+        max_z ≥ 0 || throw(DomainError(max_z, "argument must be non-negative"))
 
         p(z) = ((m - 1)K) / ((m - 2)z + m * K)
 
@@ -48,6 +48,18 @@ CBPCarryingCapacityBinomial(
     K::Integer
 ) = CBPCarryingCapacityBinomial(K, 4, 0.25, 3 * K)
 
+# The log likelihood of the CBP, in terms of K, m, and q, for a given path
+# contained in z_list
+function log_likelihood(
+    d::CBPCarryingCapacityBinomial,
+    z_list::Vector{<:Integer},
+    K,
+    m,
+    q
+)
+    throw(MethodError(log_likelihood, "this method has not been implemented yet"))
+end
+
 
 # A population-size-dependent branching process (PSDBP) with negative binomial
 # offspring distribution such that the PSDBP has a carrying capacity of K ∈ ℕ₁,
@@ -58,7 +70,7 @@ struct PSDBPCarryingCapacityNegativeBinomial
     m::Integer
     q::Float64
     max_z::Integer
-    P::Array{Float64,2}
+    P::Matrix{Float64}
 
     function PSDBPCarryingCapacityNegativeBinomial(
         K::Integer,
@@ -69,7 +81,7 @@ struct PSDBPCarryingCapacityNegativeBinomial
         K ≥ 0 || throw(DomainError(K, "argument must be non-negative"))
         m ≥ 2 || throw(DomainError(m, "argument must have a value of at least 2"))
         zero(q) ≤ q ≤ one(q) || throw(DomainError(q, "argument must be in the range [0,1]"))
-        max_z > 0 || throw(DomainError(max_z, "argument must be positive"))
+        max_z ≥ 0 || throw(DomainError(max_z, "argument must be non-negative"))
 
         p(z) = ((m - 1)K) / ((m - 2)z + m * K)
         ξ(z) = Distributions.NegativeBinomial(
@@ -94,3 +106,28 @@ end
 PSDBPCarryingCapacityNegativeBinomial(
     K::Integer
 ) = PSDBPCarryingCapacityNegativeBinomial(K, 4, 0.25, 3 * K)
+
+# The log likelihood of the PSDBP, in terms of K, m, and q, for a given path
+# contained in z_list
+function log_likelihood(
+    d::PSDBPCarryingCapacityNegativeBinomial,
+    z_list::Vector{<:Integer},
+    K,
+    m,
+    q
+)
+    # The specific forms of the negative binomial rate and success parameters
+    # for ∑_{i=1}^z ξ(z)
+    r(zᵢ, K, m) = ((zᵢ + K) * m * K) / ((m - 2) * zᵢ)
+    s(zᵢ, K, m, q) = ((m - 2) * zᵢ + m * K) / ((m - 2) * zᵢ + m * K + (m - 1) * (m - 2) * q * zᵢ)
+
+    # Return the sum of negative binomial log-likelihoods, one for each
+    # generation
+    return sum(
+        i -> Distributions.loglikelihood(
+            Distributions.NegativeBinomial(r(z_list[i], K, m), s(z_list[i], K, m, q)),
+            z_list[i+1]
+        ),
+        1:(length(z_list)-1)
+    )
+end

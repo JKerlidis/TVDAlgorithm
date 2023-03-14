@@ -22,4 +22,8 @@ end
     @test kahan_sum(repeat([1 / 700, 3 / 700], 2100)) == 12.0
 end
 
+@testset "Test CensoredObservation" begin
+    @test CensoredObservation(3, 1) + CensoredObservation(5, 0) == CensoredObservation(8, 1)
+end
+
 end

@@ -1,17 +1,3 @@
-# A representation of a representation that can be censored, i.e. the value may
-# lie beyond the calculated range
-struct CensoredObservation
-    v::Float64 # Observed value
-    c::Int  # Censoring flag
-end
-
-function Base.:+(
-    x::CensoredObservation,
-    y::CensoredObservation,
-)::CensoredObservation
-    CensoredObservation(x.v + y.v, x.c + y.c)
-end
-
 # Accumulator for the results of a TVD simulation
 mutable struct TVDSimulationOutput
     num_trials::Integer
