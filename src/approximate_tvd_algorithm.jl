@@ -8,7 +8,7 @@ end
 
 struct TVDSimulationSummary
     mean::Float64
-    standard_deviation::Float64
+    standard_error::Float64
     proportion_censored::Float64
 end
 
@@ -23,7 +23,7 @@ function summarise(
     n = t.num_trials - t.num_censored
     TVDSimulationSummary(
         t.S₁ / n,
-        √(t.S₂ / n - (t.S₁ / n)^2),
+        √((t.S₂ / n - (t.S₁ / n)^2) / n),
         t.num_censored / t.num_trials
     )
 end

@@ -20,7 +20,7 @@ results = Unmarshal.unmarshal(
 results = hcat(results...)
 
 path_length_plot = plot(
-    path_lengths,
+    1:50,
     i -> results[i, 10].mean,
     title="Estimated TVD over different path lengths, for K=100",
     xlabel="Path length",
@@ -34,7 +34,7 @@ path_length_plot = plot(
     guidefontsize=16,
     size=(1400, 1000),
     ylims=(0, 0.1),
-    ribbon=[results[i, 10].standard_deviation for i ∈ path_lengths],
+    ribbon=[results[i, 10].standard_error for i ∈ 1:50],
     fillcolour=:thistle,
     fillalpha=0.4,
     bottom_margin=12mm,
@@ -60,7 +60,7 @@ K_plot = plot(
     size=(1400, 1000),
     xformatter=i -> floor(10 * i),
     ylims=(0, 0.1),
-    ribbon=[results[10, i].standard_deviation for i ∈ 1:20],
+    ribbon=[results[10, i].standard_error for i ∈ 1:20],
     fillcolour=:thistle,
     fillalpha=0.4,
     bottom_margin=12mm,
