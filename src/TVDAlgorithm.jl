@@ -13,6 +13,7 @@ export
     # Branching processes
     CBPCarryingCapacityBinomial,
     PSDBPCarryingCapacityNegativeBinomial,
+    transition_probabilities,
     log_likelihood,
 
     # Exact TVD algorithm
@@ -23,6 +24,7 @@ export
     TVDSimulationOutput,
     TVDSimulationSummary,
     summarise,
+    sample_path,
     simulate_coupling_probability,
     approximate_tvd,
     approximate_tvd_extended_output

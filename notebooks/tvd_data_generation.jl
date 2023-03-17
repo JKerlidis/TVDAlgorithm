@@ -24,8 +24,8 @@ for K ∈ K_vals
         num_trials,
         K,
         path_length,
-        psdbp.P,
-        cbp.P
+        transition_probabilities(psdbp),
+        transition_probabilities(cbp)
     )
 
     if results == []

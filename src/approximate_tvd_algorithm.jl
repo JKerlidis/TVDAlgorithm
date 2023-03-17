@@ -28,6 +28,44 @@ function summarise(
     )
 end
 
+# Sample a path of length k from a homogeneous Markov process, with (possibly
+# truncated) transition matrix P and starting point z₀
+function sample_path(
+    rng::Random.AbstractRNG,
+    z₀::Integer,
+    k::Integer,
+    P::Matrix{Float64}
+)::Array{Union{Int,Nothing}}
+
+    size(P, 1) ≠ size(P, 2) && throw(DimensionMismatch("P is not a square matrix"))
+    (z₀ < 0 || z₀ ≥ size(P, 1)) && throw(DomainError(z₀, "argument should be in the range [0, √|P| - 1]"))
+    k ≥ 1 || throw(DomainError(k, "path length must be at least one"))
+
+    # Simulate k transition quantiles from P
+    transition_quantiles = Random.rand(rng, k)
+
+    # Determine the simulated path associated with these quantiles
+    path = Array{Union{Int,Nothing}}(nothing, k + 1)
+    path[1] = z₀
+    for n ∈ 1:k
+        cumulative_prob = 0.0
+        for i ∈ 1:size(P, 1)
+            cumulative_prob += P[path[n]+1, i]
+            if transition_quantiles[n] ≤ cumulative_prob
+                path[n+1] = i - 1
+                break
+            elseif i == size(P, 1)
+                # If P has been truncated to before the desired quantile,
+                # indicating that the data is censored, break out of both loops
+                # and leave subsequent transition indices empty
+                return path
+            end
+        end
+    end
+
+    return path
+end
+
 # Given two homogeneous Markov processes with (possibly truncated) transition
 # probabilities P and Q respectively, which are defined on the same state
 # space and start from state z₀, simulate a path of length k from the process
@@ -42,32 +80,9 @@ function simulate_coupling_probability(
 )::Array{CensoredObservation}
 
     size(P) ≠ size(Q) && throw(DimensionMismatch("P and Q do not have the same state space"))
-    size(P, 1) ≠ size(P, 2) && throw(DimensionMismatch("P and Q are not square matrices"))
-    (z₀ < 0 || z₀ ≥ size(P, 1)) && throw(DomainError(z₀, "argument should be in the range [0, √|P| - 1]"))
-    k ≥ 1 || throw(DomainError(k, "path length must be at least one"))
 
-    # Simulate k transition quantiles from P
-    transition_quantiles = Random.rand(rng, k)
-
-    # Determine the simulated path associated with these quantiles
-    transition_indices = Array{Union{Int,Nothing}}(nothing, k + 1)
-    transition_indices[1] = z₀
-    for n ∈ 1:k
-        cumulative_prob = 0.0
-        for i ∈ 1:size(P, 1)
-            cumulative_prob += P[transition_indices[n], i]
-            if transition_quantiles[n] ≤ cumulative_prob
-                transition_indices[n+1] = i
-                break
-            elseif i == size(P, 1)
-                # If P has been truncated to before the desired quantile,
-                # indicating that the data is censored, break out of both loops
-                # and leave subsequent transition indices empty
-                @goto path_censored
-            end
-        end
-    end
-    @label path_censored
+    # Simulate a path of length k from P
+    transition_indices = sample_path(rng, z₀, k, P)
 
     # Find the maximal coupling probabilities along this simulated path
     max_coupling_probs::Array{CensoredObservation} = [CensoredObservation(0, 1) for i ∈ 1:k]
@@ -82,8 +97,8 @@ function simulate_coupling_probability(
             return max_coupling_probs
         end
 
-        P_path_prob *= P[transition_indices[i], transition_indices[i+1]]
-        Q_path_prob *= Q[transition_indices[i], transition_indices[i+1]]
+        P_path_prob *= P[transition_indices[i]+1, transition_indices[i+1]+1]
+        Q_path_prob *= Q[transition_indices[i]+1, transition_indices[i+1]+1]
 
         if P_path_prob == 0
             max_coupling_probs[i] = CensoredObservation(0, 1)

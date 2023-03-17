@@ -51,7 +51,7 @@ function exact_tvd(
         k_step_transition_probabilities(k, Q)
     )
 
-    z₀_path_min_probs = min_k_step_probs[1:n:n^(k+1)]
+    z₀_path_min_probs = min_k_step_probs[z₀+1:n:z₀+n^(k+1)]
     tvd = 1 - kahan_sum(z₀_path_min_probs)
 
     tvd
