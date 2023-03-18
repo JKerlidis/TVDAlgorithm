@@ -35,7 +35,7 @@ function sample_path(
     z₀::Integer,
     k::Integer,
     P::Matrix{Float64}
-)::Array{Union{Int,Nothing}}
+)::Vector{Union{Int,Nothing}}
 
     size(P, 1) ≠ size(P, 2) && throw(DimensionMismatch("P is not a square matrix"))
     (z₀ < 0 || z₀ ≥ size(P, 1)) && throw(DomainError(z₀, "argument should be in the range [0, √|P| - 1]"))
@@ -77,7 +77,7 @@ function simulate_coupling_probability(
     k::Integer,
     P::Matrix{Float64},
     Q::Matrix{Float64}
-)::Array{CensoredObservation}
+)::Vector{CensoredObservation}
 
     size(P) ≠ size(Q) && throw(DimensionMismatch("P and Q do not have the same state space"))
 
@@ -85,7 +85,7 @@ function simulate_coupling_probability(
     transition_indices = sample_path(rng, z₀, k, P)
 
     # Find the maximal coupling probabilities along this simulated path
-    max_coupling_probs::Array{CensoredObservation} = [CensoredObservation(0, 1) for i ∈ 1:k]
+    max_coupling_probs::Vector{CensoredObservation} = [CensoredObservation(0, 1) for i ∈ 1:k]
 
     P_path_prob = 1
     Q_path_prob = 1
@@ -146,9 +146,9 @@ function approximate_tvd_extended_output(
     num_trials::Integer,
     z₀::Integer,
     k::Integer,
-    P::Array{Float64,2},
-    Q::Array{Float64,2}
-)::Array{TVDSimulationSummary}
+    P::Matrix{Float64},
+    Q::Matrix{Float64}
+)::Vector{TVDSimulationSummary}
 
     num_trials ≥ 1 || throw(DomainError(num_trials, "there must be at least one trial"))
 

@@ -27,11 +27,11 @@ CBPCarryingCapacityBinomial(
     K::Integer,
     m::Integer,
     q::Float64
-) = CBPCarryingCapacityBinomial(K, m, q, 3 * K)
+) = CBPCarryingCapacityBinomial(K, m, q, max(3 * K, 30))
 
 CBPCarryingCapacityBinomial(
     K::Integer
-) = CBPCarryingCapacityBinomial(K, 4, 0.25, 3 * K)
+) = CBPCarryingCapacityBinomial(K, 4, 0.25)
 
 # Return an array of transition probabilities for the CBP
 function transition_probabilities(
@@ -114,11 +114,11 @@ PSDBPCarryingCapacityNegativeBinomial(
     K::Integer,
     m::Integer,
     q::Float64
-) = PSDBPCarryingCapacityNegativeBinomial(K, m, q, 3 * K)
+) = PSDBPCarryingCapacityNegativeBinomial(K, m, q, max(3 * K, 30))
 
 PSDBPCarryingCapacityNegativeBinomial(
     K::Integer
-) = PSDBPCarryingCapacityNegativeBinomial(K, 4, 0.25, 3 * K)
+) = PSDBPCarryingCapacityNegativeBinomial(K, 4, 0.25)
 
 # Return an array of transition probabilities for the PSDBP
 function transition_probabilities(
