@@ -71,6 +71,7 @@ end
           approximate_tvd(rng, 100, 3, 5, extinction_unif_probs, extinction_bin_probs)
     @test_throws DomainError approximate_tvd(rng, 100, 4, 5, extinction_unif_probs, extinction_bin_probs)
 
+    # Ensure that approximate TVD values match the exact TVD calculation
     @test round(approximate_tvd(rng, 10000000, 1, 3, unif_probs, bin_probs), digits=3) == 0.188
     @test round(approximate_tvd(rng, 10000000, 1, 3, extinction_bin_probs, extinction_unif_probs), digits=3) == 0.094
     @test round(approximate_tvd(rng, 10000000, 0, 3, extinction_bin_probs, unif_probs), digits=3) == 0.984

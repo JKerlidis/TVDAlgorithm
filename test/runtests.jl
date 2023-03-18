@@ -4,7 +4,8 @@ using Test
 const tests = [
     "test_helpers",
     "test_exact_tvd_algorithm",
-    "test_approximate_tvd_algorithm"
+    "test_approximate_tvd_algorithm",
+    "test_processes"
 ]
 
 @testset "TVDAlgorithm" begin
