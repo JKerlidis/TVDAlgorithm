@@ -72,7 +72,7 @@ tvd_results_z₀_is_1, tvd_results_z₀_is_K = run_simulation(
 )
 
 # Save the results to file
-file = open("out/tvd_results_z0_is_1.json", "w")
+file = open("out/data/tvd_results_z0_is_1.json", "w")
 write(
     file,
     JSON.json(Dict(
@@ -84,7 +84,7 @@ write(
 )
 close(file)
 
-file = open("out/tvd_results_z0_is_K.json", "w")
+file = open("out/data/tvd_results_z0_is_K.json", "w")
 write(
     file,
     JSON.json(Dict(
