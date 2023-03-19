@@ -21,4 +21,18 @@ psdbp_10 = PSDBPCarryingCapacityNegativeBinomial(10, 5, 0.2)
     @test round(transition_probabilities(psdbp_3)[4, 1], digits=3) == 0.080
 end
 
+@testset "Test log_likelihood function" begin
+    # Sense checks
+    @test log_likelihood(cbp_3, [4, 2, 1, 3, 0]) < 0
+    @test log_likelihood(psdbp_3, [4, 2, 1, 3, 0]) < 0
+    @test log_likelihood(cbp_3, [0, 0]) == 0
+    @test log_likelihood(cbp_3, [0, 1]) == -Inf
+    @test log_likelihood(psdbp_3, [0, 0]) == 0
+    @test log_likelihood(psdbp_3, [0, 1]) == -Inf
+
+    # Specific calculated values (to match the transition_probabilities checks)
+    @test round(log_likelihood(cbp_3, [1, 2]), digits=3) == round(log(0.2165722), digits=3)
+    @test round(log_likelihood(psdbp_3, [3, 0]), digits=3) == round(log(0.0801751), digits=3)
+end
+
 end

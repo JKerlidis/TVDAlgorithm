@@ -64,13 +64,13 @@ end
 function log_likelihood(
     d::CBPCarryingCapacityBinomial,
     z_list::Vector{<:Integer},
-)
+)::Float64
 
     # Determine the probability ℙ((Zₙ|Zₙ₋₁=z) = j)
     p(z) = ((d.m - 1)d.K) / ((d.m - 2)z + d.m * d.K)
     b(z) = Distributions.Binomial(z + d.K, p(z))
-    ℙZₙ(z, j) = sum(
-        i -> Distributions.pdf(row_dist, i) *
+    ℙZₙ(z, j) = z == 0 ? Int(j == 0) : sum(
+        i -> Distributions.pdf(b(z), i) *
              Distributions.pdf(Distributions.Binomial(d.m * i, d.q), j),
         0:(z+d.K)
     )
@@ -155,12 +155,12 @@ function log_likelihood(
     # (Zₙ|Zₙ₋₁=z) = ∑_{i=1}^z ξ(z)
     r(z, K, m) = ((z + K) * m * K) / ((m - 2) * z)
     s(z, K, m, q) = ((m - 2) * z + m * K) / ((m - 2) * z + m * K + (m - 1) * (m - 2) * q * z)
-    Zₙ(z) = Distributions.NegativeBinomial(r(z, d.K, d.m), s(z, d.K, d.m, d.q)),
+    Zₙ(z) = Distributions.NegativeBinomial(r(z, d.K, d.m), s(z, d.K, d.m, d.q))
 
     # Return the sum of negative binomial log-likelihoods, one for each
     # generation
     return sum(
-        n -> Distributions.loglikelihood(
+        n -> z_list[n] == 0 ? log(z_list[n+1] == 0) : Distributions.loglikelihood(
             Zₙ(z_list[n]),
             z_list[n+1]
         ),
