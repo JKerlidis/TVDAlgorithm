@@ -1,6 +1,6 @@
-# Given a branching process, use a more conservative version of the bisection
-# method (since this isn't a convex optimisation problem) to find the value of
-# K in processes of same family that maximises the likelihood of observing a
+# Given a branching process, use a modification of the bisection method (under
+# the assumption that this is a convex optimisation problem) to find the value
+# of K in processes of same family that maximises the likelihood of observing a
 # given set of data, as well as the negative log-likelihood of this maximising
 # likelihood
 function maximise_likelihood_in_K(
@@ -12,24 +12,25 @@ function maximise_likelihood_in_K(
     min_K < 0 && throw(DomainError(min_K, "min_K should be no smaller than zero"))
     max_K < min_K && throw(DomainError(max_K, "max_K should be no smaller than min_K"))
 
-    min_nll = -log_likelihood(substitute_K(d, min_K), path)
+    nll_min_K = -log_likelihood(substitute_K(d, min_K), path)
+    nll_max_K = -log_likelihood(substitute_K(d, max_K), path)
     while max_K > min_K
-        dist_min_K = substitute_K(d, min_K)
-        nll_min_K = -log_likelihood(dist_min_K, path)
+        lower_mid_K = min_K + (max_K - min_K) ÷ 2
+        nll_lower_mid_K = -log_likelihood(substitute_K(d, lower_mid_K), path)
 
-        dist_max_K = substitute_K(d, max_K)
-        nll_max_K = -log_likelihood(dist_max_K, path)
+        upper_mid_K = lower_mid_K + 1
+        nll_upper_mid_K = -log_likelihood(substitute_K(d, upper_mid_K), path)
 
-        if nll_min_K < nll_max_K
-            min_nll = nll_min_K
-            max_K = floor(Int, min_K + 2(max_K - min_K) / 3)
+        if min(nll_min_K, nll_lower_mid_K) < min(nll_upper_mid_K, nll_max_K)
+            max_K = lower_mid_K
+            nll_max_K = nll_lower_mid_K
         else
-            min_nll = nll_max_K
-            min_K = ceil(Int, min_K + (max_K - min_K) / 3)
+            min_K = upper_mid_K
+            nll_min_K = nll_upper_mid_K
         end
     end
 
-    return (min_K, min_nll)
+    return (min_K, nll_min_K)
 end
 
 # Given a true generating model 'd_true' and an alternative model 'd_alt',
