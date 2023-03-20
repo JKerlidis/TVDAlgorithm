@@ -55,7 +55,7 @@ function select_model_in_K(
             num_steps,
             transition_probabilities(d_true)
         )
-        if !isnothing(candidate_path[path_length+1])
+        if !isnothing(candidate_path[num_steps+1])
             path = convert(Vector{Int}, candidate_path)
             break
         elseif i == max_attempts
@@ -63,12 +63,12 @@ function select_model_in_K(
         end
     end
 
-    d_true_family_mle, d_true_family_nll = maximise_likelihood_in_K(d_true, path, min_K, max_K)
-    d_alt_family_mle, d_alt_family_nll = maximise_likelihood_in_K(d_alt, path, min_K, max_K)
+    d_true_mle_K, d_true_family_nll = maximise_likelihood_in_K(d_true, path, min_K, max_K)
+    d_alt_mle_K, d_alt_family_nll = maximise_likelihood_in_K(d_alt, path, min_K, max_K)
 
     if d_true_family_nll < d_alt_family_nll
-        return d_true_family_mle
+        return substitute_K(d_true, d_true_mle_K)
     else
-        return d_alt_family_mle
+        return substitute_K(d_alt, d_alt_mle_K)
     end
 end
