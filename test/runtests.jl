@@ -5,7 +5,8 @@ const tests = [
     "test_helpers",
     "test_exact_tvd_algorithm",
     "test_approximate_tvd_algorithm",
-    "test_processes"
+    "test_processes",
+    "test_model_selection"
 ]
 
 @testset "TVDAlgorithm" begin

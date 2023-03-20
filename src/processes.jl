@@ -1,8 +1,21 @@
+abstract type BranchingProcess end
+
+function substitute_K(
+    d::T,
+    new_K::Integer
+)::T where {T<:BranchingProcess}
+    return T(
+        [
+            key == :K ? new_K : getfield(d, key) for key ∈ fieldnames(T)
+        ]...
+    )
+end
+
 # A controlled branching process (CBP) with Bin(q, m) offspring distribution,
 # q ∈ ℕ₁, m ∈ [0,1], and Bin(K, p(z)) control function, K ∈ ℕ₁ the carrying
 # capacity of the model, and p(z) = (m-1)K / ((m-2)z + mK) is a decreasing
 # function of z that ensures that K is indeed a carrying capacity
-struct CBPCarryingCapacityBinomial
+struct CBPCarryingCapacityBinomial <: BranchingProcess
     K::Integer
     m::Integer
     q::Float64
@@ -88,12 +101,11 @@ end
 # offspring distribution such that the PSDBP has a carrying capacity of K ∈ ℕ₁,
 # and such that the mean and variance of the one-step distributions match that
 # of the CBPCarryingCapacityBinomial model
-struct PSDBPCarryingCapacityNegativeBinomial
+struct PSDBPCarryingCapacityNegativeBinomial <: BranchingProcess
     K::Integer
     m::Integer
     q::Float64
     max_z::Integer
-    P::Matrix{Float64}
 
     function PSDBPCarryingCapacityNegativeBinomial(
         K::Integer,

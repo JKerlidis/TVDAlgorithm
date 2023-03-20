@@ -16,6 +16,7 @@ num_trials = 1000000
 # Simulate the TVD between the CBP and PSDBP over different carrying capacities
 # (K), different path lengths, and for z₀=1 and z₀=K
 function run_simulation(
+    rng::Random.AbstractRNG,
     K_vals::Vector{<:Integer},
     path_length::Integer,
     num_trials::Integer
@@ -68,7 +69,7 @@ function run_simulation(
 end
 
 tvd_results_z₀_is_1, tvd_results_z₀_is_K = run_simulation(
-    K_vals, path_length, num_trials
+    rng, K_vals, path_length, num_trials
 )
 
 # Save the results to file

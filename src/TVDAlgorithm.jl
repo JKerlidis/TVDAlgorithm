@@ -11,6 +11,8 @@ export
     CensoredObservation,
 
     # Branching processes
+    BranchingProcess,
+    substitute_K,
     CBPCarryingCapacityBinomial,
     PSDBPCarryingCapacityNegativeBinomial,
     transition_probabilities,
@@ -27,11 +29,15 @@ export
     sample_path,
     simulate_coupling_probability,
     approximate_tvd,
-    approximate_tvd_extended_output
+    approximate_tvd_extended_output,
+
+    # Model selection
+    maximise_likelihood_in_K
 
 include("helpers.jl")
 include("processes.jl")
 include("exact_tvd_algorithm.jl")
 include("approximate_tvd_algorithm.jl")
+include("model_selection.jl")
 
 end

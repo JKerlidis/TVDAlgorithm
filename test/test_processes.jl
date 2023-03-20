@@ -9,6 +9,11 @@ psdbp_3 = PSDBPCarryingCapacityNegativeBinomial(3, 10, 0.1, 5)
 cbp_10 = CBPCarryingCapacityBinomial(10, 5, 0.2)
 psdbp_10 = PSDBPCarryingCapacityNegativeBinomial(10, 5, 0.2)
 
+@testset "Test substitute_K function" begin
+    @test substitute_K(cbp_3, 10) == CBPCarryingCapacityBinomial(10, 10, 0.1, 5)
+    @test substitute_K(psdbp_3, 10) == PSDBPCarryingCapacityNegativeBinomial(10, 10, 0.1, 5)
+end
+
 @testset "Test transition_probabilities function" begin
     # Sense checks
     @test transition_probabilities(cbp_3)[1, :] == [1, 0, 0, 0, 0, 0]
