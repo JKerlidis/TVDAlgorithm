@@ -58,7 +58,7 @@ function select_model_in_K(
         if !isnothing(candidate_path[path_length+1])
             path = convert(Vector{Int}, candidate_path)
             break
-        else if i == max_attempts
+        elseif i == max_attempts
             throw(ErrorException("too many attempts to generate an uncensored path"))
         end
     end
