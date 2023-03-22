@@ -1,4 +1,4 @@
-module TVDPathLengthPlot
+module TVDPlotsBinomialOffspring
 
 using Pkg
 Pkg.activate(".")
@@ -16,7 +16,7 @@ struct ConsolidatedTVDSimulationResults
     results::Matrix{TVDAlgorithm.TVDSimulationSummary}
 end
 
-file = open("out/data/tvd_results_z0_is_1.json", "r")
+file = open("out/data/tvd_binomial_offspring_z0_is_1.json", "r")
 data = read(file, String)
 close(file)
 
@@ -25,7 +25,7 @@ tvd_results_z0_is_1 = Unmarshal.unmarshal(
     JSON.parse(data)
 )
 
-file = open("out/data/tvd_results_z0_is_K.json", "r")
+file = open("out/data/tvd_binomial_offspring_z0_is_K.json", "r")
 data = read(file, String)
 close(file)
 
@@ -34,13 +34,59 @@ tvd_results_z0_is_K = Unmarshal.unmarshal(
     JSON.parse(data)
 )
 
-TVD1(i) = tvd_results_z0_is_K.results[30, i].mean
-TVDK(i) = tvd_results_z0_is_1.results[30, i].mean
+path_length_plot = plot(
+    1:50,
+    i -> tvd_results_z0_is_K.results[i, 15].mean,
+    title="Estimated TVD over different path lengths, for K=100 and z₀=1",
+    xlabel="Path length",
+    ylabel="Estimated TVD",
+    linecolor=:purple,
+    linealpha=0.9,
+    linewidth=2,
+    legend=false,
+    titlefontsize=24,
+    tickfontsize=16,
+    guidefontsize=16,
+    size=(1400, 1000),
+    ylims=(0, 0.03),
+    bottom_margin=12mm,
+    left_margin=12mm,
+    top_margin=3mm
+)
+
+savefig(path_length_plot, "out/plots/binomial_offspring/tvd_path_length.png")
+
+comparative_path_length_plot = plot(
+    1:50,
+    [
+        i -> tvd_results_z0_is_K.results[i, 15].mean
+        i -> tvd_results_z0_is_1.results[i, 15].mean
+    ],
+    title="Estimated TVD over different path lengths, for K=100",
+    xlabel="Path length",
+    ylabel="Estimated TVD",
+    linecolor=[:purple :thistle4],
+    linealpha=0.9,
+    linewidth=2,
+    legend=:topleft,
+    labels=["z₀ = 1" "z₀ = 100"],
+    legendfontsize=16,
+    titlefontsize=24,
+    tickfontsize=16,
+    guidefontsize=16,
+    size=(1400, 1000),
+    ylims=(0, 0.03),
+    bottom_margin=12mm,
+    left_margin=12mm,
+    top_margin=3mm
+)
+
+savefig(comparative_path_length_plot, "out/plots/binomial_offspring/tvd_path_length_comparative.png")
 
 K_plot = plot(
     i -> tvd_results_z0_is_1.K_vals[i],
-    TVDK,
-    5:29,
+    i -> tvd_results_z0_is_1.results[30, i].mean,
+    1:25,
     title="Estimated TVD over different K, for path length 30 and z₀=1",
     xlabel="Carrying capacity",
     ylabel="Estimated TVD",
@@ -61,15 +107,15 @@ K_plot = plot(
     top_margin=3mm
 )
 
-savefig(K_plot, "out/plots/tvd_K_plot.png")
+savefig(K_plot, "out/plots/binomial_offspring/tvd_K.png")
 
 comparative_K_plot = plot(
     i -> tvd_results_z0_is_1.K_vals[i],
     [
-        TVD1,
-        TVDK
+        i -> tvd_results_z0_is_K.results[30, i].mean
+        i -> tvd_results_z0_is_1.results[30, i].mean
     ],
-    5:29,
+    1:25,
     title="Estimated TVD over different K, for path length 30",
     xlabel="Carrying capacity",
     ylabel="Estimated TVD",
@@ -89,7 +135,7 @@ comparative_K_plot = plot(
     top_margin=3mm
 )
 
-savefig(comparative_K_plot, "out/plots/tvd_K_plot_comparative.png")
+savefig(comparative_K_plot, "out/plots/binomial_offspring/tvd_K_comparative.png")
 
 K_plot_multiple_path_lengths = plot(
     i -> tvd_results_z0_is_1.K_vals[i],
@@ -103,14 +149,15 @@ K_plot_multiple_path_lengths = plot(
         i -> tvd_results_z0_is_K.results[35, i].mean,
         i -> tvd_results_z0_is_K.results[40, i].mean,
     ],
-    5:29,
+    1:25,
     title="Estimated TVD over different K, for z₀=1 and different path lengths",
     xlabel="Carrying capacity",
     ylabel="Estimated TVD",
     linealpha=0.9,
     linewidth=2,
     legend=:topright,
-    labels=["path length 5" "path length 10" "path length 15" "path length 20" "path length 25" "path length 30" "path length 35" "path length 40"],
+    labels=hcat("path length 5", "path length 10", "path length 15", "path length 20",
+        "path length 25", "path length 30", "path length 35", "path length 40"),
     legendfontsize=16,
     titlefontsize=24,
     tickfontsize=16,
@@ -125,6 +172,6 @@ K_plot_multiple_path_lengths = plot(
     top_margin=3mm
 )
 
-savefig(K_plot_multiple_path_lengths, "out/plots/tvd_K_and_path_length_plot.png")
+savefig(K_plot_multiple_path_lengths, "out/plots/binomial_offspring/tvd_K_and_path_length.png")
 
 end
