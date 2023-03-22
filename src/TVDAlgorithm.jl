@@ -13,8 +13,8 @@ export
     # Branching processes
     BranchingProcess,
     substitute_K,
-    CBPCarryingCapacityBinomial,
-    PSDBPCarryingCapacityNegativeBinomial,
+    CBPCarryingCapacityBinomialOffspring,
+    PSDBPMatchingKBinomialOffspring,
     transition_probabilities,
     log_likelihood,
 

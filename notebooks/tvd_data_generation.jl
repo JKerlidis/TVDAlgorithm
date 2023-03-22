@@ -28,10 +28,10 @@ function run_simulation(
         println("Simulating TVD for K = ", K)
 
         cbp_transition_probs = TVDAlgorithm.transition_probabilities(
-            TVDAlgorithm.CBPCarryingCapacityBinomial(K)
+            TVDAlgorithm.CBPCarryingCapacityBinomialOffspring(K)
         )
         psdbp_transition_probs = TVDAlgorithm.transition_probabilities(
-            TVDAlgorithm.PSDBPCarryingCapacityNegativeBinomial(K)
+            TVDAlgorithm.PSDBPMatchingKBinomialOffspring(K)
         )
 
         simulation_output_1 = TVDAlgorithm.approximate_tvd_extended_output(

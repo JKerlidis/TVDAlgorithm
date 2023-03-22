@@ -15,13 +15,13 @@ end
 # q ∈ ℕ₁, m ∈ [0,1], and Bin(K, p(z)) control function, K ∈ ℕ₁ the carrying
 # capacity of the model, and p(z) = (m-1)K / ((m-2)z + mK) is a decreasing
 # function of z that ensures that K is indeed a carrying capacity
-struct CBPCarryingCapacityBinomial <: BranchingProcess
+struct CBPCarryingCapacityBinomialOffspring <: BranchingProcess
     K::Integer
     m::Integer
     q::Float64
     max_z::Integer
 
-    function CBPCarryingCapacityBinomial(
+    function CBPCarryingCapacityBinomialOffspring(
         K::Integer,
         m::Integer,
         q::Float64,
@@ -36,19 +36,19 @@ struct CBPCarryingCapacityBinomial <: BranchingProcess
     end
 end
 
-CBPCarryingCapacityBinomial(
+CBPCarryingCapacityBinomialOffspring(
     K::Integer,
     m::Integer,
     q::Float64
-) = CBPCarryingCapacityBinomial(K, m, q, max(3 * K, 30))
+) = CBPCarryingCapacityBinomialOffspring(K, m, q, max(3 * K, 30))
 
-CBPCarryingCapacityBinomial(
+CBPCarryingCapacityBinomialOffspring(
     K::Integer
-) = CBPCarryingCapacityBinomial(K, 4, 0.25)
+) = CBPCarryingCapacityBinomialOffspring(K, 4, 0.25)
 
 # Return an array of transition probabilities for the CBP
 function transition_probabilities(
-    d::CBPCarryingCapacityBinomial
+    d::CBPCarryingCapacityBinomialOffspring
 )::Matrix{Float64}
 
     p(z) = ((d.m - 1)d.K) / ((d.m - 2)z + d.m * d.K)
@@ -75,7 +75,7 @@ end
 # Return the log-likelihood of observing a sequence of observations, under a
 # given parameterisation of the CBP
 function log_likelihood(
-    d::CBPCarryingCapacityBinomial,
+    d::CBPCarryingCapacityBinomialOffspring,
     z_list::Vector{<:Integer},
 )::Float64
 
@@ -100,14 +100,14 @@ end
 # A population-size-dependent branching process (PSDBP) with negative binomial
 # offspring distribution such that the PSDBP has a carrying capacity of K ∈ ℕ₁,
 # and such that the mean and variance of the one-step distributions match that
-# of the CBPCarryingCapacityBinomial model
-struct PSDBPCarryingCapacityNegativeBinomial <: BranchingProcess
+# of the CBPCarryingCapacityBinomialOffspring model
+struct PSDBPMatchingKBinomialOffspring <: BranchingProcess
     K::Integer
     m::Integer
     q::Float64
     max_z::Integer
 
-    function PSDBPCarryingCapacityNegativeBinomial(
+    function PSDBPMatchingKBinomialOffspring(
         K::Integer,
         m::Integer,
         q::Float64,
@@ -122,19 +122,19 @@ struct PSDBPCarryingCapacityNegativeBinomial <: BranchingProcess
     end
 end
 
-PSDBPCarryingCapacityNegativeBinomial(
+PSDBPMatchingKBinomialOffspring(
     K::Integer,
     m::Integer,
     q::Float64
-) = PSDBPCarryingCapacityNegativeBinomial(K, m, q, max(3 * K, 30))
+) = PSDBPMatchingKBinomialOffspring(K, m, q, max(3 * K, 30))
 
-PSDBPCarryingCapacityNegativeBinomial(
+PSDBPMatchingKBinomialOffspring(
     K::Integer
-) = PSDBPCarryingCapacityNegativeBinomial(K, 4, 0.25)
+) = PSDBPMatchingKBinomialOffspring(K, 4, 0.25)
 
 # Return an array of transition probabilities for the PSDBP
 function transition_probabilities(
-    d::PSDBPCarryingCapacityNegativeBinomial,
+    d::PSDBPMatchingKBinomialOffspring,
 )::Matrix{Float64}
 
     # Define the specific negative binomial distribution generating
@@ -159,7 +159,7 @@ end
 # Return the log-likelihood of observing a sequence of observations, under a
 # given parameterisation of the PSDBP
 function log_likelihood(
-    d::PSDBPCarryingCapacityNegativeBinomial,
+    d::PSDBPMatchingKBinomialOffspring,
     z_list::Vector{<:Integer},
 )::Float64
 
