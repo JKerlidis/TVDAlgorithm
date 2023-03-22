@@ -1,4 +1,4 @@
-module TVDPlotsBinomialOffspring
+module TVDPlotsGeometricOffspring
 
 using Pkg
 Pkg.activate(".")
@@ -16,7 +16,7 @@ struct ConsolidatedTVDSimulationResults
     results::Matrix{TVDAlgorithm.TVDSimulationSummary}
 end
 
-file = open("out/data/tvd_binomial_offspring_z0_is_1.json", "r")
+file = open("out/data/tvd_geometric_offspring_z0_is_1.json", "r")
 data = read(file, String)
 close(file)
 
@@ -25,7 +25,7 @@ tvd_results_z0_is_1 = Unmarshal.unmarshal(
     JSON.parse(data)
 )
 
-file = open("out/data/tvd_binomial_offspring_z0_is_K.json", "r")
+file = open("out/data/tvd_geometric_offspring_z0_is_K.json", "r")
 data = read(file, String)
 close(file)
 
@@ -34,6 +34,7 @@ tvd_results_z0_is_K = Unmarshal.unmarshal(
     JSON.parse(data)
 )
 
+println([tvd_results_z0_is_1.results[i, 15].mean for i ∈ 1:50])
 path_length_plot = plot(
     1:50,
     i -> tvd_results_z0_is_1.results[i, 15].mean,
@@ -48,13 +49,13 @@ path_length_plot = plot(
     tickfontsize=16,
     guidefontsize=16,
     size=(1400, 1000),
-    ylims=(0, 0.03),
+    ylims=(0, 1),
     bottom_margin=12mm,
     left_margin=12mm,
     top_margin=3mm
 )
 
-savefig(path_length_plot, "out/plots/binomial_offspring/tvd_path_length.png")
+savefig(path_length_plot, "out/plots/geometric_offspring/tvd_path_length.png")
 
 comparative_path_length_plot = plot(
     1:50,
@@ -75,7 +76,7 @@ comparative_path_length_plot = plot(
     tickfontsize=16,
     guidefontsize=16,
     size=(1400, 1000),
-    ylims=(0, 0.03),
+    ylims=(0, 1),
     bottom_margin=12mm,
     left_margin=12mm,
     top_margin=3mm
@@ -129,7 +130,7 @@ comparative_K_plot = plot(
     tickfontsize=16,
     guidefontsize=16,
     size=(1400, 1000),
-    ylims=(0, 0.12),
+    ylims=(0, 1),
     bottom_margin=12mm,
     left_margin=12mm,
     top_margin=3mm
@@ -140,14 +141,14 @@ savefig(comparative_K_plot, "out/plots/binomial_offspring/tvd_K_comparative.png"
 K_plot_multiple_path_lengths = plot(
     i -> tvd_results_z0_is_1.K_vals[i],
     [
-        i -> tvd_results_z0_is_1.results[5, i].mean,
-        i -> tvd_results_z0_is_1.results[10, i].mean,
-        i -> tvd_results_z0_is_1.results[15, i].mean,
-        i -> tvd_results_z0_is_1.results[20, i].mean,
-        i -> tvd_results_z0_is_1.results[25, i].mean,
-        i -> tvd_results_z0_is_1.results[30, i].mean,
-        i -> tvd_results_z0_is_1.results[35, i].mean,
-        i -> tvd_results_z0_is_1.results[40, i].mean,
+        i -> tvd_results_z0_is_K.results[5, i].mean,
+        i -> tvd_results_z0_is_K.results[10, i].mean,
+        i -> tvd_results_z0_is_K.results[15, i].mean,
+        i -> tvd_results_z0_is_K.results[20, i].mean,
+        i -> tvd_results_z0_is_K.results[25, i].mean,
+        i -> tvd_results_z0_is_K.results[30, i].mean,
+        i -> tvd_results_z0_is_K.results[35, i].mean,
+        i -> tvd_results_z0_is_K.results[40, i].mean,
     ],
     1:25,
     title="Estimated TVD over different K, for z₀=1 and different path lengths",

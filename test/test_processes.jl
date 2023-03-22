@@ -25,13 +25,11 @@ end
     @test all(sum(r) ≤ 1 for r ∈ eachrow(transition_probabilities(cbp_geom)))
     @test all(sum(r) ≤ 1 for r ∈ eachrow(transition_probabilities(psdbp_geom)))
 
-    println([sum(r) for r ∈ eachrow(transition_probabilities(cbp_geom))])
-
     # Specific calculated values
     @test round(transition_probabilities(cbp_bin)[2, 3], digits=3) == 0.217
     @test round(transition_probabilities(psdbp_bin)[4, 1], digits=3) == 0.080
     @test round(transition_probabilities(cbp_geom)[2, 1], digits=3) == 0.132
-    @test round(transition_probabilities(psdbp_geom)[4, 4], digits=3) == 0.100
+    @test round(transition_probabilities(psdbp_geom)[4, 4], digits=3) == 0.143
 end
 
 @testset "Test log_likelihood function" begin
@@ -50,10 +48,10 @@ end
     @test log_likelihood(psdbp_geom, [0, 1]) == -Inf
 
     # Specific calculated values (to match the transition_probabilities checks)
-    @test round(log_likelihood(cbp_bin, [1, 2]), digits=3) == round(log(0.2165722), digits=3)
-    @test round(log_likelihood(psdbp_bin, [3, 0]), digits=3) == round(log(0.0801751), digits=3)
-    @test round(log_likelihood(cbp_geom, [1, 0]), digits=3) == round(log(0.1324981), digits=3)
-    @test round(log_likelihood(psdbp_geom, [3, 3]), digits=3) == round(log(0.0998209), digits=3)
+    @test round(log_likelihood(cbp_bin, [1, 2]), digits=5) == round(log(0.2165722), digits=5)
+    @test round(log_likelihood(psdbp_bin, [3, 0]), digits=5) == round(log(0.0801751), digits=5)
+    @test round(log_likelihood(cbp_geom, [1, 0]), digits=5) == round(log(0.1324981), digits=5)
+    @test round(log_likelihood(psdbp_geom, [3, 3]), digits=5) == round(log(0.1425428), digits=5)
 end
 
 end
