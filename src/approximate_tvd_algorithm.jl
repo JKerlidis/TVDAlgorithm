@@ -23,7 +23,7 @@ function summarise(
     n = t.num_trials - t.num_censored
     TVDSimulationSummary(
         t.S₁ / n,
-        √max((t.S₂ / n - (t.S₁ / n)^2) / n, 0),
+        √((t.S₂ / n - (t.S₁ / n)^2) / n),
         t.num_censored / t.num_trials
     )
 end
