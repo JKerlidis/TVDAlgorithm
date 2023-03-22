@@ -1,4 +1,4 @@
-module TVDDataBinomialOffsring
+module TVDDataGeometricOffspring
 
 using Pkg
 Pkg.activate(".")
@@ -35,10 +35,10 @@ function run_simulation(
         end
 
         cbp_transition_probs = TVDAlgorithm.transition_probabilities(
-            TVDAlgorithm.CBPKBinomialOffspring(K)
+            TVDAlgorithm.CBPKGeometricOffspring(K)
         )
         psdbp_transition_probs = TVDAlgorithm.transition_probabilities(
-            TVDAlgorithm.PSDBPMatchingKBinomialOffspring(K)
+            TVDAlgorithm.PSDBPMatchingKGeometricOffspring(K)
         )
 
         simulation_output = TVDAlgorithm.approximate_tvd_extended_output(
@@ -69,11 +69,11 @@ function run_simulation(
 end
 
 run_simulation(
-    rng, K_vals, path_length, num_trials, 1, "out/data/tvd_binomial_offspring_z0_is_1.json"
+    rng, K_vals, path_length, num_trials, 1, "out/data/tvd_geometric_offspring_z0_is_1.json"
 )
 
 run_simulation(
-    rng, K_vals, path_length, num_trials, "K", "out/data/tvd_binomial_offspring_z0_is_K.json"
+    rng, K_vals, path_length, num_trials, "K", "out/data/tvd_geometric_offspring_z0_is_K.json"
 )
 
 end
