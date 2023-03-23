@@ -36,8 +36,8 @@ function transition_probabilities(
 
     # Define the specific negative binomial distribution generating
     # Zₙ = ∑_{i=1}^z ξ(z)
-    r(z, K, M) = ((z + M) * K^2) / (2M * z + K^2)
-    s(z, K, M) = (M * z + K^2) / (3M * z + 2K^2)
+    r(z, K, M) = ((z + M) * K^2) / (2(K + M) * z + 2K * M + K^2)
+    s(z, K, M) = ((z + K) * (K + M)) / (5(K + M) * z + 5K * M + 3K^2)
     Zₙ(z) = Distributions.NegativeBinomial(r(z, d.K, d.M), s(z, d.K, d.M))
 
     P = Array{Float64}(undef, d.max_z + 1, d.max_z + 1)
@@ -62,8 +62,8 @@ function log_likelihood(
 
     # Define the specific negative binomial distribution generating
     # (Zₙ|Zₙ₋₁=z) = ∑_{i=1}^z ξ(z)
-    r(z, K, M) = ((z + M) * K^2) / (2M * z + K^2)
-    s(z, K, M) = (M * z + K^2) / (3M * z + 2K^2)
+    r(z, K, M) = ((z + M) * K^2) / (2(K + M) * z + 2K * M + K^2)
+    s(z, K, M) = ((z + K) * (K + M)) / (5(K + M) * z + 5K * M + 3K^2)
     Zₙ(z) = Distributions.NegativeBinomial(r(z, d.K, d.M), s(z, d.K, d.M))
 
     # Return the sum of negative binomial log-likelihoods, one for each

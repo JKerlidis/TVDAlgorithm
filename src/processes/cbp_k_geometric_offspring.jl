@@ -34,7 +34,7 @@ function transition_probabilities(
     d::CBPKGeometricOffspring
 )::Matrix{Float64}
 
-    p(z) = d.K^2 / (d.M * z + d.K^2)
+    p(z) = d.K^2 / ((d.K + d.M) * (z + d.K))
 
     P = Array{Float64}(undef, d.max_z + 1, d.max_z + 1)
 
@@ -46,7 +46,7 @@ function transition_probabilities(
         else
             P[z+1, c+1] = sum(
                 i -> Distributions.pdf(row_dist, i) *
-                     (i == 0 ? Int(c == 0) : Distributions.pdf(Distributions.NegativeBinomial(i, 0.5), c)),
+                     (i == 0 ? Int(c == 0) : Distributions.pdf(Distributions.NegativeBinomial(i, 1 / 3), c)),
                 0:(z+d.M)
             )
         end
@@ -63,11 +63,11 @@ function log_likelihood(
 )::Float64
 
     # Determine the probability ℙ((Zₙ|Zₙ₋₁=z) = j)
-    p(z) = d.K^2 / (d.M * z + d.K^2)
+    p(z) = d.K^2 / ((d.K + d.M) * (z + d.K))
     b(z) = Distributions.Binomial(z + d.M, p(z))
     ℙZₙ(z, j) = z == 0 ? Int(j == 0) : sum(
         i -> Distributions.pdf(b(z), i) *
-             (i == 0 ? Int(j == 0) : Distributions.pdf(Distributions.NegativeBinomial(i, 0.5), j)),
+             (i == 0 ? Int(j == 0) : Distributions.pdf(Distributions.NegativeBinomial(i, 1 / 3), j)),
         0:(z+d.M)
     )
 
