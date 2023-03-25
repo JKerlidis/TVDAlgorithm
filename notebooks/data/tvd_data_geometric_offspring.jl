@@ -7,8 +7,8 @@ import TVDAlgorithm
 import Random
 import JSON
 
-rng = Random.Xoshiro(514)
-K_vals = [[i for i ∈ 5:9]; [i for i ∈ 10:10:200]]
+rng = Random.Xoshiro(415)
+K_vals = [i for i ∈ 10:10:200]
 path_length = 50
 num_trials = 1000000
 
@@ -20,6 +20,7 @@ function run_simulation(
     path_length::Integer,
     num_trials::Integer,
     first_generation_size::Union{Integer,String},
+    mean_only::Bool,
     output_file::String
 )
     tvd_results = []
@@ -38,7 +39,7 @@ function run_simulation(
             TVDAlgorithm.CBPKGeometricOffspring(K)
         )
         psdbp_transition_probs = TVDAlgorithm.transition_probabilities(
-            TVDAlgorithm.PSDBPMatchingKGeometricOffspring(K)
+            TVDAlgorithm.PSDBPMatchingKGeometricOffspring(K, mean_only)
         )
 
         simulation_output = TVDAlgorithm.approximate_tvd_extended_output(
@@ -69,11 +70,15 @@ function run_simulation(
 end
 
 run_simulation(
-    rng, K_vals, path_length, num_trials, 1, "out/data/tvd_geometric_offspring_z0_is_1.json"
+    rng, K_vals, path_length, num_trials, "K", false, "out/data/tvd_geometric_offspring_z0_is_K.json"
 )
 
 run_simulation(
-    rng, K_vals, path_length, num_trials, "K", "out/data/tvd_geometric_offspring_z0_is_K.json"
+    rng, K_vals, path_length, num_trials, 1, false, "out/data/tvd_geometric_offspring_z0_is_1.json"
+)
+
+run_simulation(
+    rng, K_vals, path_length, num_trials, 1, true, "out/data/tvd_geometric_offspring_mean_only_z0_is_1.json"
 )
 
 end

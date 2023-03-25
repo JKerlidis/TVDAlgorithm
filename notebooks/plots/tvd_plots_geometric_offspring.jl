@@ -16,15 +16,6 @@ struct ConsolidatedTVDSimulationResults
     results::Matrix{TVDAlgorithm.TVDSimulationSummary}
 end
 
-file = open("out/data/tvd_geometric_offspring_z0_is_1.json", "r")
-data = read(file, String)
-close(file)
-
-tvd_results_z0_is_1 = Unmarshal.unmarshal(
-    ConsolidatedTVDSimulationResults,
-    JSON.parse(data)
-)
-
 file = open("out/data/tvd_geometric_offspring_z0_is_K.json", "r")
 data = read(file, String)
 close(file)
@@ -34,9 +25,27 @@ tvd_results_z0_is_K = Unmarshal.unmarshal(
     JSON.parse(data)
 )
 
+file = open("out/data/tvd_geometric_offspring_z0_is_1.json", "r")
+data = read(file, String)
+close(file)
+
+tvd_results_z0_is_1 = Unmarshal.unmarshal(
+    ConsolidatedTVDSimulationResults,
+    JSON.parse(data)
+)
+
+file = open("out/data/tvd_geometric_offspring_mean_only_z0_is_1.json", "r")
+data = read(file, String)
+close(file)
+
+tvd_results_mean_only_z0_is_1 = Unmarshal.unmarshal(
+    ConsolidatedTVDSimulationResults,
+    JSON.parse(data)
+)
+
 path_length_plot = plot(
     1:50,
-    i -> tvd_results_z0_is_1.results[i, 15].mean,
+    i -> tvd_results_z0_is_1.results[i, 10].mean,
     title="Estimated TVD over different path lengths, for K=100 and z₀=1",
     xlabel="Path length",
     ylabel="Estimated TVD",
@@ -59,8 +68,8 @@ savefig(path_length_plot, "out/plots/geometric_offspring/tvd_path_length.png")
 comparative_path_length_plot = plot(
     1:50,
     [
-        i -> tvd_results_z0_is_1.results[i, 15].mean
-        i -> tvd_results_z0_is_K.results[i, 15].mean
+        i -> tvd_results_z0_is_1.results[i, 10].mean
+        i -> tvd_results_z0_is_K.results[i, 10].mean
     ],
     title="Estimated TVD over different path lengths, for K=100",
     xlabel="Path length",
@@ -83,10 +92,37 @@ comparative_path_length_plot = plot(
 
 savefig(comparative_path_length_plot, "out/plots/geometric_offspring/tvd_path_length_comparative.png")
 
+mean_only_path_length_plot = plot(
+    1:50,
+    [
+        i -> tvd_results_z0_is_1.results[i, 10].mean
+        i -> tvd_results_mean_only_z0_is_1.results[i, 10].mean
+    ],
+    title="Estimated TVD over different path lengths, for K=100",
+    xlabel="Path length",
+    ylabel="Estimated TVD",
+    linecolor=[:purple :thistle4],
+    linealpha=0.9,
+    linewidth=2,
+    legend=:topleft,
+    labels=["mean and variance matching" "mean matching only"],
+    legendfontsize=16,
+    titlefontsize=24,
+    tickfontsize=16,
+    guidefontsize=16,
+    size=(1400, 1000),
+    ylims=(0, 0.5),
+    bottom_margin=12mm,
+    left_margin=12mm,
+    top_margin=3mm
+)
+
+savefig(mean_only_path_length_plot, "out/plots/geometric_offspring/tvd_path_length_mean_only.png")
+
 K_plot = plot(
     i -> tvd_results_z0_is_1.K_vals[i],
     i -> tvd_results_z0_is_1.results[30, i].mean,
-    1:25,
+    1:20,
     title="Estimated TVD over different K, for path length 30 and z₀=1",
     xlabel="Carrying capacity",
     ylabel="Estimated TVD",
@@ -115,7 +151,7 @@ comparative_K_plot = plot(
         i -> tvd_results_z0_is_1.results[30, i].mean
         i -> tvd_results_z0_is_K.results[30, i].mean
     ],
-    1:25,
+    1:20,
     title="Estimated TVD over different K, for path length 30",
     xlabel="Carrying capacity",
     ylabel="Estimated TVD",
@@ -137,6 +173,34 @@ comparative_K_plot = plot(
 
 savefig(comparative_K_plot, "out/plots/geometric_offspring/tvd_K_comparative.png")
 
+mean_only_K_plot = plot(
+    i -> tvd_results_z0_is_1.K_vals[i],
+    [
+        i -> tvd_results_z0_is_1.results[30, i].mean
+        i -> tvd_results_mean_only_z0_is_1.results[30, i].mean
+    ],
+    1:20,
+    title="Estimated TVD over different K, for path length 30",
+    xlabel="Carrying capacity",
+    ylabel="Estimated TVD",
+    linecolor=[:purple :thistle4],
+    linealpha=0.9,
+    linewidth=2,
+    legend=:topright,
+    labels=["mean and variance matching" "mean matching only"],
+    legendfontsize=16,
+    titlefontsize=24,
+    tickfontsize=16,
+    guidefontsize=16,
+    size=(1400, 1000),
+    ylims=(0, 0.5),
+    bottom_margin=12mm,
+    left_margin=12mm,
+    top_margin=3mm
+)
+
+savefig(mean_only_K_plot, "out/plots/geometric_offspring/tvd_K_mean_only.png")
+
 K_plot_multiple_path_lengths = plot(
     i -> tvd_results_z0_is_1.K_vals[i],
     [
@@ -147,9 +211,8 @@ K_plot_multiple_path_lengths = plot(
         i -> tvd_results_z0_is_1.results[25, i].mean,
         i -> tvd_results_z0_is_1.results[30, i].mean,
         i -> tvd_results_z0_is_1.results[35, i].mean,
-        i -> tvd_results_z0_is_1.results[40, i].mean,
     ],
-    1:25,
+    1:20,
     title="Estimated TVD over different K, for z₀=1 and different path lengths",
     xlabel="Carrying capacity",
     ylabel="Estimated TVD",
