@@ -17,11 +17,6 @@ end
     @test position_index((2, 1, 1, 3), 3, 4) == 56
 end
 
-@testset "Test kahan_sum function" begin
-    @test kahan_sum([1, 2, 3, 4]) == 10
-    @test kahan_sum(repeat([1 / 700, 3 / 700], 2100)) == 12.0
-end
-
 @testset "Test CensoredObservation" begin
     @test CensoredObservation(3, 1) + CensoredObservation(5, 0) == CensoredObservation(8, 1)
 end

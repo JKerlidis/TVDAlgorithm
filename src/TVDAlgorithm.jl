@@ -7,7 +7,6 @@ export
     # Helper functions
     index_position,
     position_index,
-    kahan_sum,
     CensoredObservation,
 
     # Branching processes
@@ -34,7 +33,8 @@ export
     approximate_tvd_extended_output,
 
     # Model selection
-    maximise_likelihood_in_K
+    maximise_likelihood_in_K,
+    select_model_in_K
 
 include("helpers.jl")
 include("processes.jl")

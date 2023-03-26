@@ -52,7 +52,7 @@ function exact_tvd(
     )
 
     z₀_path_min_probs = min_k_step_probs[z₀+1:n:z₀+n^(k+1)]
-    tvd = 1 - kahan_sum(z₀_path_min_probs)
+    tvd = 1 - sum(z₀_path_min_probs)
 
     tvd
 end

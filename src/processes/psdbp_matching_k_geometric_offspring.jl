@@ -3,18 +3,18 @@
 # and such that the mean and variance of the one-step distributions match that
 # of the CBPKGeometricOffspring model. If `mean_only` is set to true, only the
 # mean will be made to match
-struct PSDBPMatchingKGeometricOffspring <: BranchingProcess
-    K::Integer
+struct PSDBPMatchingKGeometricOffspring{T<:Real} <: BranchingProcess
+    K::T
     M::Integer
     max_z::Integer
     mean_only::Bool
 
-    function PSDBPMatchingKGeometricOffspring(
-        K::Integer,
+    function PSDBPMatchingKGeometricOffspring{T}(
+        K::T,
         M::Integer,
         max_z::Integer,
-        mean_only::Bool=false
-    )
+        mean_only::Bool
+    ) where {T<:Real}
         K ≥ 0 || throw(DomainError(K, "argument must be non-negative"))
         M ≥ 0 || throw(DomainError(M, "argument must be non-negative"))
         max_z ≥ 0 || throw(DomainError(max_z, "argument must be non-negative"))
@@ -24,15 +24,22 @@ struct PSDBPMatchingKGeometricOffspring <: BranchingProcess
 end
 
 PSDBPMatchingKGeometricOffspring(
-    K::Integer,
+    K::T,
     M::Integer,
+    max_z::Integer,
     mean_only::Bool=false
-) = PSDBPMatchingKGeometricOffspring(K, M, max(3 * K, 30), mean_only)
+) where {T<:Real} = PSDBPMatchingKGeometricOffspring{T}(K, M, max_z, mean_only)
 
 PSDBPMatchingKGeometricOffspring(
-    K::Integer,
+    K::T,
+    M::Integer,
     mean_only::Bool=false
-) = PSDBPMatchingKGeometricOffspring(K, 2, mean_only)
+) where {T<:Real} = PSDBPMatchingKGeometricOffspring(K, M, max(3 * K, 30), mean_only)
+
+PSDBPMatchingKGeometricOffspring(
+    K::T,
+    mean_only::Bool=false
+) where {T<:Real} = PSDBPMatchingKGeometricOffspring(K, 2, mean_only)
 
 # Return an array of transition probabilities for the PSDBP
 function transition_probabilities(

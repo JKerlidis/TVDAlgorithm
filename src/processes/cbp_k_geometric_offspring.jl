@@ -2,16 +2,16 @@
 # q ∈ [0,1], and Bin(z+M, p(z)) control function, M ∈ ℕ₁ a rate of constant
 # immigration, and p(z) = K² / (Mz + K²) is a decreasing function of z
 # that ensures that K > 0 is the carrying capacity the model
-struct CBPKGeometricOffspring <: BranchingProcess
-    K::Integer
+struct CBPKGeometricOffspring{T<:Real} <: BranchingProcess
+    K::T
     M::Integer
     max_z::Integer
 
-    function CBPKGeometricOffspring(
-        K::Integer,
+    function CBPKGeometricOffspring{T}(
+        K::T,
         M::Integer,
         max_z::Integer
-    )
+    ) where {T<:Real}
         K ≥ 0 || throw(DomainError(K, "argument must be non-negative"))
         M ≥ 0 || throw(DomainError(M, "argument must be non-negative"))
         max_z ≥ 0 || throw(DomainError(max_z, "argument must be non-negative"))
@@ -21,13 +21,19 @@ struct CBPKGeometricOffspring <: BranchingProcess
 end
 
 CBPKGeometricOffspring(
-    K::Integer,
-    M::Integer
-) = CBPKGeometricOffspring(K, M, max(3 * K, 30))
+    K::T,
+    M::Integer,
+    max_z::Integer
+) where {T<:Real} = CBPKGeometricOffspring{T}(K, M, max_z)
 
 CBPKGeometricOffspring(
-    K::Integer
-) = CBPKGeometricOffspring(K, 2)
+    K::T,
+    M::Integer
+) where {T<:Real} = CBPKGeometricOffspring(K, M, max(3 * K, 30))
+
+CBPKGeometricOffspring(
+    K::T
+) where {T<:Real} = CBPKGeometricOffspring(K, 2)
 
 # Return an array of transition probabilities for the CBP
 function transition_probabilities(

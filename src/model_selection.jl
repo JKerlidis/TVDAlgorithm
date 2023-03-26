@@ -33,12 +33,14 @@ function maximise_likelihood_in_K(
     return (min_K, nll_min_K)
 end
 
-# Given a true generating model 'd_true' and an alternative model 'd_alt',
-# generate a path from the true model, and select, from the family of
-# distributions taken by varying K in d_true and d_alt, the model with the
-# highest likelihood of observing this path
+# Given a true generating model 'd_true' (plus its transition probability
+# matrix) and an alternative model 'd_alt', generate a path from the true
+# model, and select, from the family of distributions taken by varying K in
+# d_true and d_alt, the model with the highest likelihood of observing this
+# path
 function select_model_in_K(
     rng::Random.AbstractRNG,
+    transition_probabilities::Matrix{Float64},
     d_true::BranchingProcess,
     d_alt::BranchingProcess,
     num_steps::Integer,
@@ -54,7 +56,7 @@ function select_model_in_K(
             rng,
             z₀,
             num_steps,
-            transition_probabilities(d_true)
+            transition_probabilities
         )
         if !isnothing(candidate_path[num_steps+1])
             path = convert(Vector{Int}, candidate_path)
