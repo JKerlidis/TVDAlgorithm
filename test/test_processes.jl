@@ -12,8 +12,8 @@ psdbp_geom = PSDBPMatchingKGeometricOffspring(10, 2, 5)
 @testset "Test substitute_K function" begin
     @test substitute_K(cbp_bin, 10) == CBPKBinomialOffspring(10, 10, 0.1, 5)
     @test substitute_K(psdbp_bin, 10) == PSDBPMatchingKBinomialOffspring(10, 10, 0.1, 5)
-    @test substitute_K(cbp_geom, 6) == CBPKGeometricOffspring(6, 2, 5)
-    @test substitute_K(psdbp_geom, 6, true) == PSDBPMatchingKGeometricOffspring(6, 2, 30)
+    @test substitute_K(cbp_geom, 6.5) == CBPKGeometricOffspring(6, 2, 5)
+    @test substitute_K(psdbp_geom, 6.5, true) == PSDBPMatchingKGeometricOffspring(6, 2, 30)
 end
 
 @testset "Test transition_probabilities function" begin

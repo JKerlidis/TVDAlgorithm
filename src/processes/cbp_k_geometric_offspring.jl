@@ -29,7 +29,7 @@ CBPKGeometricOffspring(
 CBPKGeometricOffspring(
     K::T,
     M::Integer
-) where {T<:Real} = CBPKGeometricOffspring(K, M, max(3 * K, 30))
+) where {T<:Real} = CBPKGeometricOffspring(K, M, max(trunc(Int, 3 * K), 30))
 
 CBPKGeometricOffspring(
     K::T

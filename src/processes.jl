@@ -12,16 +12,16 @@ const processes = [
 # carrying capacity
 function substitute_K(
     d::T,
-    new_K::Integer,
+    new_K::Real,
     reset_max_z::Bool=false
 )::T where {T<:BranchingProcess}
 
     return T(
         [
             if key == :K
-                new_K
+                getfield(d, key) isa Integer ? trunc(Int, new_K) : convert(typeof(getfield(d, key)), new_K)
             elseif key == :max_z
-                reset_max_z ? max(3 * new_K, 30) : getfield(d, key)
+                reset_max_z ? max(trunc(Int, 3 * new_K), 30) : getfield(d, key)
             else
                 getfield(d, key)
             end

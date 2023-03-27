@@ -34,7 +34,7 @@ PSDBPMatchingKGeometricOffspring(
     K::T,
     M::Integer,
     mean_only::Bool=false
-) where {T<:Real} = PSDBPMatchingKGeometricOffspring(K, M, max(3 * K, 30), mean_only)
+) where {T<:Real} = PSDBPMatchingKGeometricOffspring(K, M, max(trunc(Int, 3 * K), 30), mean_only)
 
 PSDBPMatchingKGeometricOffspring(
     K::T,

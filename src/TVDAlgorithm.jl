@@ -2,6 +2,7 @@ module TVDAlgorithm
 
 import Distributions
 import Random
+import Optim
 
 export
     # Helper functions
