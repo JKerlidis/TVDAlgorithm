@@ -13,10 +13,9 @@ struct MLEModel
     K::Integer
 end
 
-rng = Random.Xoshiro(613)
-K_vals = [i for i ∈ 100:100:150]
+K_vals = [i for i ∈ 10:10:200]
 path_length = 30
-num_trials = 10
+num_trials = 5000
 
 # For various values of K, simulate from a true distribution, and then find the
 # MLE on both the true distribution and an alternate distribution, in
@@ -38,12 +37,14 @@ function run_simulation(
     for (i, K) ∈ enumerate(K_vals)
 
         num_correct = 0
+        transition_probabilities = TVDAlgorithm.transition_probabilities(
+            TVDAlgorithm.substitute_K(true_distribution, K, true)
+        )
+
         ProgressMeter.@showprogress string("Running simulation for K=", K) for j ∈ 1:num_trials
             selected_model = TVDAlgorithm.select_model_in_K(
                 rng,
-                TVDAlgorithm.transition_probabilities(
-                    TVDAlgorithm.substitute_K(true_distribution, K, true)
-                ),
+                transition_probabilities,
                 true_distribution,
                 alternate_distribution,
                 path_length,
@@ -74,13 +75,13 @@ function run_simulation(
         ))
     )
     close(file)
-
+    1
     return num_correctly_identified
 end
 
 println("Simulating paths from the PSDBP:")
 psdbp_mle_num_correct = run_simulation(
-    rng,
+    Random.Xoshiro(613),
     K_vals,
     path_length,
     num_trials,
@@ -92,7 +93,7 @@ psdbp_mle_num_correct = run_simulation(
 
 println("Simulating paths from the CBP:")
 cbp_mle_num_correct = run_simulation(
-    rng,
+    Random.Xoshiro(614),
     K_vals,
     path_length,
     num_trials,
