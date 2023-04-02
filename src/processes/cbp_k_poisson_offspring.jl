@@ -1,13 +1,13 @@
-# A controlled branching process (CBP) with Geom(1/3) offspring distribution
-# and Bin(z+M, p(z)) control function, M ∈ ℕ₁ a rate of constant immigration,
-# and p(z) = K² / ((K + M)(z + K)) is a decreasing function of z that ensures
-# that K > 0 is the carrying capacity the model
-struct CBPKGeometricOffspring{T<:Real} <: BranchingProcess
+# A controlled branching process (CBP) with Poi(2) offspring distribution and
+# Bin(z+M, p(z)) control function, M ∈ ℕ₁ a rate of constant immigration, and
+# p(z) = K² / ((K + M)(z + K)) is a decreasing function of z that ensures that
+# K > 0 is the carrying capacity the model
+struct CBPKPoissonOffspring{T<:Real} <: BranchingProcess
     K::T
     M::Integer
     max_z::Integer
 
-    function CBPKGeometricOffspring{T}(
+    function CBPKPoissonOffspring{T}(
         K::T,
         M::Integer,
         max_z::Integer
@@ -20,24 +20,24 @@ struct CBPKGeometricOffspring{T<:Real} <: BranchingProcess
     end
 end
 
-CBPKGeometricOffspring(
+CBPKPoissonOffspring(
     K::T,
     M::Integer,
     max_z::Integer
-) where {T<:Real} = CBPKGeometricOffspring{T}(K, M, max_z)
+) where {T<:Real} = CBPKPoissonOffspring{T}(K, M, max_z)
 
-CBPKGeometricOffspring(
+CBPKPoissonOffspring(
     K::T,
     M::Integer
-) where {T<:Real} = CBPKGeometricOffspring(K, M, max(trunc(Int, 3 * K), 30))
+) where {T<:Real} = CBPKPoissonOffspring(K, M, max(trunc(Int, 3 * K), 30))
 
-CBPKGeometricOffspring(
+CBPKPoissonOffspring(
     K::T
-) where {T<:Real} = CBPKGeometricOffspring(K, 2)
+) where {T<:Real} = CBPKPoissonOffspring(K, 2)
 
 # Return an array of transition probabilities for the CBP
 function transition_probabilities(
-    d::CBPKGeometricOffspring
+    d::CBPKPoissonOffspring
 )::Matrix{Float64}
 
     p(z) = d.K^2 / ((d.K + d.M) * (z + d.K))
@@ -52,7 +52,7 @@ function transition_probabilities(
         else
             P[z+1, c+1] = sum(
                 i -> Distributions.pdf(row_dist, i) *
-                     (i == 0 ? Int(c == 0) : Distributions.pdf(Distributions.NegativeBinomial(i, 1 / 3), c)),
+                     Distributions.pdf(Distributions.Poisson(2 * i), c),
                 0:(z+d.M)
             )
         end
@@ -64,7 +64,7 @@ end
 # Return the log-likelihood of observing a sequence of observations, under a
 # given parameterisation of the CBP
 function log_likelihood(
-    d::CBPKGeometricOffspring,
+    d::CBPKPoissonOffspring,
     z_list::Vector{<:Integer},
 )::Float64
 
@@ -73,12 +73,11 @@ function log_likelihood(
     b(z) = Distributions.Binomial(z + d.M, p(z))
     ℙZₙ(z, j) = z == 0 ? Int(j == 0) : sum(
         i -> Distributions.pdf(b(z), i) *
-             (i == 0 ? Int(j == 0) : Distributions.pdf(Distributions.NegativeBinomial(i, 1 / 3), j)),
+             Distributions.pdf(Distributions.Poisson(2 * i), j),
         0:(z+d.M)
     )
 
-    # Return the sum of negative binomial log-likelihoods, one for each
-    # generation
+    # Return the sum of log-likelihoods, one for each generation
     return sum(
         n -> log(ℙZₙ(z_list[n], z_list[n+1])),
         1:(length(z_list)-1)

@@ -159,7 +159,7 @@ comparative_K_plot = plot(
     linealpha=0.9,
     linewidth=2,
     legend=:topright,
-    labels=["z₀ = 1" "z₀ = 100"],
+    labels=["z₀ = 1" "z₀ = K"],
     legendfontsize=16,
     titlefontsize=24,
     tickfontsize=16,

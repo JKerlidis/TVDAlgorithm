@@ -3,18 +3,22 @@ abstract type BranchingProcess end
 const processes = [
     "cbp_k_binomial_offspring",
     "cbp_k_geometric_offspring",
+    "cbp_k_poisson_offspring",
     "psdbp_matching_k_binomial_offspring",
-    "psdbp_matching_k_geometric_offspring"
+    "psdbp_matching_k_geometric_offspring",
+    "psdbp_matching_k_poisson_offspring"
 ]
 
 # Return a copy of the branching process with a new carrying capacity (K) set.
 # Optionally also reset the process' value of `max_z` to reflect this new
 # carrying capacity
 function substitute_K(
-    d::T,
+    d::BranchingProcess,
     new_K::Real,
     reset_max_z::Bool=false
-)::T where {T<:BranchingProcess}
+)::BranchingProcess
+
+    T = typeof(d)
 
     return T(
         [
