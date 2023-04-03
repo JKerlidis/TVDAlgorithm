@@ -1,4 +1,5 @@
 abstract type BranchingProcess end
+abstract type TypedBranchingProcess{T} <: BranchingProcess end
 
 const processes = [
     "cbp_k_binomial_offspring",
@@ -13,25 +14,32 @@ const processes = [
 # Optionally also reset the process' value of `max_z` to reflect this new
 # carrying capacity
 function substitute_K(
-    d::BranchingProcess,
+    d::TypedBranchingProcess{T},
     new_K::Real,
     reset_max_z::Bool=false
-)::BranchingProcess
+) where {T<:Real}
 
-    T = typeof(d)
+    if T <: Integer
+        set_K = trunc(T, new_K)
+        set_max_z = max(3 * set_K, 30)
+    else
+        set_K = convert(T, new_K)
+        set_max_z = max(trunc(Int, 3 * new_K), 30)
+    end
 
-    return T(
-        [
-            if key == :K
-                getfield(d, key) isa Integer ? trunc(Int, new_K) : convert(typeof(getfield(d, key)), new_K)
-            elseif key == :max_z
-                reset_max_z ? max(trunc(Int, 3 * new_K), 30) : getfield(d, key)
-            else
-                getfield(d, key)
-            end
-            for key ∈ fieldnames(T)
-        ]...
-    )
+    S = typeof(d)
+    fields = [
+        if key == :K
+            set_K
+        elseif key == :max_z
+            reset_max_z ? set_max_z : getfield(d, key)
+        else
+            getfield(d, key)
+        end
+        for key ∈ fieldnames(S)
+    ]
+
+    return S(fields...)
 end
 
 for p ∈ processes

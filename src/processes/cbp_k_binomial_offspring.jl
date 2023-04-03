@@ -2,18 +2,18 @@
 # q ∈ ℕ₁, m ∈ [0,1], and Bin(z+K, p(z)) control function, K ∈ ℕ₁ the carrying
 # capacity of the model, and p(z) = (m-1)K / ((m-2)z + mK) is a decreasing
 # function of z that ensures that K is indeed a carrying capacity
-struct CBPKBinomialOffspring <: BranchingProcess
-    K::Integer
+struct CBPKBinomialOffspring{T<:Integer} <: TypedBranchingProcess{T}
+    K::T
     m::Integer
     q::Float64
     max_z::Integer
 
-    function CBPKBinomialOffspring(
-        K::Integer,
+    function CBPKBinomialOffspring{T}(
+        K::T,
         m::Integer,
         q::Float64,
         max_z::Integer
-    )
+    ) where {T<:Integer}
         K ≥ 0 || throw(DomainError(K, "argument must be non-negative"))
         m ≥ 2 || throw(DomainError(m, "argument must have a value of at least 2"))
         zero(q) ≤ q ≤ one(q) || throw(DomainError(q, "argument must be in the range [0,1]"))
@@ -24,14 +24,21 @@ struct CBPKBinomialOffspring <: BranchingProcess
 end
 
 CBPKBinomialOffspring(
-    K::Integer,
+    K::T,
     m::Integer,
-    q::Float64
-) = CBPKBinomialOffspring(K, m, q, max(3 * K, 30))
+    q::Float64,
+    max_z::Integer
+) where {T<:Integer} = CBPKBinomialOffspring{T}(K, m, q, max_z)
 
 CBPKBinomialOffspring(
-    K::Integer
-) = CBPKBinomialOffspring(K, 4, 0.25)
+    K::T,
+    m::Integer,
+    q::Float64
+) where {T<:Integer} = CBPKBinomialOffspring(K, m, q, max(trunc(Int, 3 * K), 30))
+
+CBPKBinomialOffspring(
+    K::T
+) where {T<:Integer} = CBPKBinomialOffspring(K, 4, 0.25)
 
 # Return an array of transition probabilities for the CBP
 function transition_probabilities(

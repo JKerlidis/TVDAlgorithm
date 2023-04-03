@@ -1,14 +1,14 @@
-# Given a branching process, use a modification of the bisection method (under
-# the assumption that this is a convex optimisation problem) to find the value
-# of K in processes of same family that maximises the likelihood of observing a
-# given set of data, as well as the negative log-likelihood of this maximising
-# likelihood
-function maximise_likelihood_in_K(
-    d::BranchingProcess,
+# Given a branching process with integer K, use a modification of the bisection
+# method (under the assumption that this is a convex optimisation problem) to
+# find the value of K in processes of same family that maximises the likelihood
+# of observing a given set of data, as well as the negative log-likelihood of
+# this maximising likelihood
+function (maximise_likelihood_in_K(
+    d::TypedBranchingProcess{T},
     path::Vector{Int},
     min_K::Integer=1,
     max_K::Integer=400
-)::Tuple{Int,Float64}
+)::Tuple{Int,Float64}) where {T<:Integer}
     min_K < 0 && throw(DomainError(min_K, "min_K should be no smaller than zero"))
     max_K < min_K && throw(DomainError(max_K, "max_K should be no smaller than min_K"))
 
@@ -31,6 +31,25 @@ function maximise_likelihood_in_K(
     end
 
     return (min_K, nll_min_K)
+end
+
+# Given a branching process with floating point K, use the Brent optimisation
+# method to find the value of K in process of the same family that maximises
+# the likelihood of observaing a given set of data, as well as the negative
+# log-likelihood of this maximising likelihood
+function maximise_likelihood_in_K(
+    d::TypedBranchingProcess{Float64},
+    path::Vector{Int},
+    min_K::Integer=1,
+    max_K::Integer=400
+)::Tuple{Float64,Float64}
+    min_K < 0 && throw(DomainError(min_K, "min_K should be no smaller than zero"))
+    max_K < min_K && throw(DomainError(max_K, "max_K should be no smaller than min_K"))
+
+    nll(K) = -log_likelihood(substitute_K(d, K), path)
+    result = Optim.optimize(nll, min_K, max_K)
+
+    return (result.minimizer, result.minimum)
 end
 
 # Given a true generating model 'd_true' (plus its transition probability

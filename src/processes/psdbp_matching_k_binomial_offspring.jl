@@ -2,18 +2,18 @@
 # offspring distribution such that the PSDBP has a carrying capacity of K ∈ ℕ₁,
 # and such that the mean and variance of the one-step distributions match that
 # of the CBPKBinomialOffspring model
-struct PSDBPMatchingKBinomialOffspring <: BranchingProcess
-    K::Integer
+struct PSDBPMatchingKBinomialOffspring{T<:Integer} <: TypedBranchingProcess{T}
+    K::T
     m::Integer
     q::Float64
     max_z::Integer
 
-    function PSDBPMatchingKBinomialOffspring(
-        K::Integer,
+    function PSDBPMatchingKBinomialOffspring{T}(
+        K::T,
         m::Integer,
         q::Float64,
         max_z::Integer
-    )
+    ) where {T<:Integer}
         K ≥ 0 || throw(DomainError(K, "argument must be non-negative"))
         m ≥ 2 || throw(DomainError(m, "argument must have a value of at least 2"))
         zero(q) ≤ q ≤ one(q) || throw(DomainError(q, "argument must be in the range [0,1]"))
@@ -24,14 +24,21 @@ struct PSDBPMatchingKBinomialOffspring <: BranchingProcess
 end
 
 PSDBPMatchingKBinomialOffspring(
-    K::Integer,
+    K::T,
     m::Integer,
-    q::Float64
-) = PSDBPMatchingKBinomialOffspring(K, m, q, max(3 * K, 30))
+    q::Float64,
+    max_z::Integer
+) where {T<:Integer} = PSDBPMatchingKBinomialOffspring{T}(K, m, q, max_z)
 
 PSDBPMatchingKBinomialOffspring(
-    K::Integer
-) = PSDBPMatchingKBinomialOffspring(K, 4, 0.25)
+    K::T,
+    m::Integer,
+    q::Float64
+) where {T<:Integer} = PSDBPMatchingKBinomialOffspring(K, m, q, max(trunc(Int, 3 * K), 30))
+
+PSDBPMatchingKBinomialOffspring(
+    K::T
+) where {T<:Integer} = PSDBPMatchingKBinomialOffspring(K, 4, 0.25)
 
 # Return an array of transition probabilities for the PSDBP
 function transition_probabilities(

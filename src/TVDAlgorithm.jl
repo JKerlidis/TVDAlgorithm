@@ -12,6 +12,7 @@ export
 
     # Branching processes
     BranchingProcess,
+    TypedBranchingProcess,
     CBPKBinomialOffspring,
     CBPKGeometricOffspring,
     CBPKPoissonOffspring,

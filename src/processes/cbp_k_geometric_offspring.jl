@@ -2,7 +2,7 @@
 # and Bin(z+M, p(z)) control function, M ∈ ℕ₁ a rate of constant immigration,
 # and p(z) = K² / ((K + M)(z + K)) is a decreasing function of z that ensures
 # that K > 0 is the carrying capacity the model
-struct CBPKGeometricOffspring{T<:Real} <: BranchingProcess
+struct CBPKGeometricOffspring{T<:Real} <: TypedBranchingProcess{T}
     K::T
     M::Integer
     max_z::Integer
