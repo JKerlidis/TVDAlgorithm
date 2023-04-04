@@ -8,16 +8,16 @@ cbp_bin = CBPKBinomialOffspring(3, 10, 0.1, 5)
 psdbp_bin = PSDBPMatchingKBinomialOffspring(3, 10, 0.1, 5)
 cbp_geom = CBPKGeometricOffspring(10, 2, 5)
 psdbp_geom = PSDBPMatchingKGeometricOffspring(10, 2, 5)
-cbp_poi = CBPKPoissonOffspring(10, 2, 5)
-psdbp_poi = PSDBPMatchingKPoissonOffspring(10, 2, 5)
+cbp_poi = CBPKPoissonOffspring(10, 2, 2.0, 5)
+psdbp_poi = PSDBPMatchingKPoissonOffspring(10, 2, 2.0, 5)
 
 @testset "Test substitute_K function" begin
     @test substitute_K(cbp_bin, 10) == CBPKBinomialOffspring(10, 10, 0.1, 5)
     @test substitute_K(psdbp_bin, 10) == PSDBPMatchingKBinomialOffspring(10, 10, 0.1, 5)
     @test substitute_K(cbp_geom, 6.5) == CBPKGeometricOffspring(6, 2, 5)
     @test substitute_K(psdbp_geom, 6.5, true) == PSDBPMatchingKGeometricOffspring(6, 2, 30)
-    @test substitute_K(cbp_poi, 3.2, true) == CBPKPoissonOffspring(3, 2, 30)
-    @test substitute_K(psdbp_poi, 15) == PSDBPMatchingKPoissonOffspring(15, 2, 5)
+    @test substitute_K(cbp_poi, 3.2, true) == CBPKPoissonOffspring(3, 2, 2.0, 30)
+    @test substitute_K(psdbp_poi, 15) == PSDBPMatchingKPoissonOffspring(15, 2, 2.0, 5)
 end
 
 @testset "Test transition_probabilities function" begin

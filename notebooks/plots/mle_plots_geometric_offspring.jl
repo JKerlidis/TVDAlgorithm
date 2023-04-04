@@ -18,7 +18,7 @@ struct MLEResults
     results::Vector{Int}
 end
 
-file = open("out/data/mle_geometric_offspring_psdbp_true.json")
+file = open("out/data/mle_int_geometric_offspring_psdbp_true.json")
 data = read(file, String)
 close(file)
 
@@ -27,7 +27,7 @@ mle_results_psdbp_true = Unmarshal.unmarshal(
     JSON.parse(data)
 )
 
-file = open("out/data/mle_geometric_offspring_cbp_true.json")
+file = open("out/data/mle_int_geometric_offspring_cbp_true.json")
 data = read(file, String)
 close(file)
 

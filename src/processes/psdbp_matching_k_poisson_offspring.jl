@@ -6,35 +6,46 @@
 struct PSDBPMatchingKPoissonOffspring{T<:Real} <: TypedBranchingProcess{T}
     K::T
     M::Integer
+    λ::Float64
     max_z::Integer
     mean_only::Bool
 
     function PSDBPMatchingKPoissonOffspring{T}(
         K::T,
         M::Integer,
+        λ::Float64,
         max_z::Integer,
         mean_only::Bool
     ) where {T<:Real}
         K ≥ 0 || throw(DomainError(K, "argument must be non-negative"))
         M ≥ 0 || throw(DomainError(M, "argument must be non-negative"))
+        λ ≥ 2 || throw(DomainError(λ, "argument must be ≥2"))
         max_z ≥ 0 || throw(DomainError(max_z, "argument must be non-negative"))
 
-        new(K, M, max_z, mean_only)
+        new(K, M, λ, max_z, mean_only)
     end
 end
 
 PSDBPMatchingKPoissonOffspring(
     K::T,
     M::Integer,
+    λ::Float64,
     max_z::Integer,
     mean_only::Bool=false
-) where {T<:Real} = PSDBPMatchingKPoissonOffspring{T}(K, M, max_z, mean_only)
+) where {T<:Real} = PSDBPMatchingKPoissonOffspring{T}(K, M, λ, max_z, mean_only)
+
+PSDBPMatchingKPoissonOffspring(
+    K::T,
+    M::Integer,
+    λ::Float64,
+    mean_only::Bool=false
+) where {T<:Real} = PSDBPMatchingKPoissonOffspring(K, M, λ, max(trunc(Int, 3 * K), 30), mean_only)
 
 PSDBPMatchingKPoissonOffspring(
     K::T,
     M::Integer,
     mean_only::Bool=false
-) where {T<:Real} = PSDBPMatchingKPoissonOffspring(K, M, max(trunc(Int, 3 * K), 30), mean_only)
+) where {T<:Real} = PSDBPMatchingKPoissonOffspring(K, M, 4.0, mean_only)
 
 PSDBPMatchingKPoissonOffspring(
     K::T,
@@ -48,13 +59,13 @@ function transition_probabilities(
 
     # Define the specific negative binomial distribution generating
     # Zₙ = ∑_{i=1}^z ξ(z)
-    r(z, K, M) = d.mean_only ?
-                 ((z + M) * K^2) / ((K + M) * (z + K)) :
-                 ((z + M) * K^2) / ((K + M) * z + K * M)
-    s(z, K, M) = d.mean_only ?
-                 1 / 3 :
-                 ((z + K) * (K + M)) / (3(K + M) * z + K * (K + 3M))
-    Zₙ(z) = Distributions.NegativeBinomial(r(z, d.K, d.M), s(z, d.K, d.M))
+    r(z, K, M, λ) = d.mean_only ?
+                    (2K^2 * (z + M)) / (λ * (K + M) * (z + K)) :
+                    (2K^2 * (z + M)) / (λ * (K + M) * z + λ * K * M + (λ - 2) * K^2)
+    s(z, K, M, λ) = d.mean_only ?
+                    1 / (1 + λ) :
+                    ((z + K) * (K + M)) / ((1 + λ) * (K + M) * (K + z) - 2K^2)
+    Zₙ(z) = Distributions.NegativeBinomial(r(z, d.K, d.M, d.λ), s(z, d.K, d.M, d.λ))
 
     P = Array{Float64}(undef, d.max_z + 1, d.max_z + 1)
 
@@ -78,13 +89,13 @@ function log_likelihood(
 
     # Define the specific negative binomial distribution generating
     # (Zₙ|Zₙ₋₁=z) = ∑_{i=1}^z ξ(z)
-    r(z, K, M) = d.mean_only ?
-                 ((z + M) * K^2) / ((K + M) * (z + K)) :
-                 ((z + M) * K^2) / ((K + M) * z + K * M)
-    s(z, K, M) = d.mean_only ?
-                 1 / 3 :
-                 ((z + K) * (K + M)) / (3(K + M) * z + K * (K + 3M))
-    Zₙ(z) = Distributions.NegativeBinomial(r(z, d.K, d.M), s(z, d.K, d.M))
+    r(z, K, M, λ) = d.mean_only ?
+                    (2K^2 * (z + M)) / (λ * (K + M) * (z + K)) :
+                    (2K^2 * (z + M)) / (λ * (K + M) * z + λ * K * M + (λ - 2) * K^2)
+    s(z, K, M, λ) = d.mean_only ?
+                    1 / (1 + λ) :
+                    ((z + K) * (K + M)) / ((1 + λ) * (K + M) * (K + z) - 2K^2)
+    Zₙ(z) = Distributions.NegativeBinomial(r(z, d.K, d.M, d.λ), s(z, d.K, d.M, d.λ))
 
     # Return the sum of negative binomial log-likelihoods, one for each
     # generation
