@@ -1,86 +1,17 @@
 module MLEFloatPoissonOffspring
 
-using Pkg
-Pkg.activate(".")
+include("./simulations.jl")
 
+import .Simulations
 import TVDAlgorithm
 import Random
-import ProgressMeter
-import JSON
-
-struct MLEModel
-    model::Type
-    K::Float64
-end
 
 K_vals = [i for i ∈ 10.0:10:200.0]
 path_length = 30
 num_trials = 5000
 
-# For various values of K, simulate from a true distribution, and then find the
-# MLE on both the true distribution and an alternate distribution, in
-# particular whether the likelihood is better maximised by the true model than
-# the alternate
-function run_simulation(
-    rng::Random.AbstractRNG,
-    K_vals::Vector{Float64},
-    path_length::Integer,
-    num_trials::Integer,
-    true_distribution::TVDAlgorithm.TypedBranchingProcess{Float64},
-    alternate_distribution::TVDAlgorithm.TypedBranchingProcess{Float64},
-    z₀::Integer,
-    output_file::String
-)
-    num_correctly_identified = zeros(Int, length(K_vals))
-    selected_models = Matrix{MLEModel}(undef, length(K_vals), num_trials)
-
-    for (i, K) ∈ enumerate(K_vals)
-
-        num_correct = 0
-        transition_probabilities = TVDAlgorithm.transition_probabilities(
-            TVDAlgorithm.substitute_K(true_distribution, K, true)
-        )
-
-        ProgressMeter.@showprogress string("Running simulation for K=", K) for j ∈ 1:num_trials
-            selected_model = TVDAlgorithm.select_model_in_K(
-                rng,
-                transition_probabilities,
-                true_distribution,
-                alternate_distribution,
-                path_length,
-                z₀
-            )
-            selected_models[i, j] = MLEModel(
-                typeof(selected_model),
-                selected_model.K
-            )
-            if typeof(selected_model) == typeof(true_distribution)
-                num_correct += 1
-            end
-        end
-        num_correctly_identified[i] = num_correct
-    end
-
-    file = open(output_file, "w")
-    write(
-        file,
-        JSON.json(Dict(
-            "K_vals" => K_vals,
-            "path_length" => path_length,
-            "num_trials" => num_trials,
-            "true_model" => typeof(true_distribution),
-            "alternate_model" => typeof(alternate_distribution),
-            "data" => selected_models,
-            "results" => num_correctly_identified
-        ))
-    )
-    close(file)
-    1
-    return num_correctly_identified
-end
-
 println("Simulating paths from the PSDBP:")
-psdbp_mle_num_correct = run_simulation(
+psdbp_mle_num_correct = Simulations.mle_simulation(
     Random.Xoshiro(7539),
     K_vals,
     path_length,
@@ -92,7 +23,7 @@ psdbp_mle_num_correct = run_simulation(
 )
 
 println("Simulating paths from the CBP:")
-cbp_mle_num_correct = run_simulation(
+cbp_mle_num_correct = Simulations.mle_simulation(
     Random.Xoshiro(7540),
     K_vals,
     path_length,
