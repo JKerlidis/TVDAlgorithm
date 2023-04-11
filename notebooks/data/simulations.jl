@@ -61,6 +61,61 @@ function tvd_simulation(
     close(file)
 end
 
+
+# Specifically for the CBPKPoissonOffspring model and corresponding PSDBP,
+# simulate the effect of varying the initial population size and the level of
+# zero-inflation (which increases as λ does) on the TVD
+function zero_inflation_tvd_simulation(
+    rng::Random.AbstractRNG,
+    K::Integer,
+    M::Integer,
+    path_length::Integer,
+    num_trials::Integer,
+    z₀_values::Vector{<:Integer},
+    λ_values::Vector{<:Float64},
+    output_file::String
+)
+    tvd_results = Matrix{Float64}(undef, length(λ_values), length(z₀_values))
+
+    for (i, λ) ∈ enumerate(λ_values)
+        cbp_transition_probs = TVDAlgorithm.transition_probabilities(
+            TVDAlgorithm.CBPKPoissonOffspring(K, M, λ)
+        )
+
+        psdbp_transition_probs = TVDAlgorithm.transition_probabilities(
+            TVDAlgorithm.PSDBPMatchingKPoissonOffspring(K, M, λ)
+        )
+
+        ProgressMeter.@showprogress string("Running simulation for λ=", λ) for (j, z₀) ∈ enumerate(z₀_values)
+            simulated_tvd = TVDAlgorithm.approximate_tvd(
+                rng,
+                num_trials,
+                z₀,
+                path_length,
+                psdbp_transition_probs,
+                cbp_transition_probs
+            )
+
+            tvd_results[i, j] = simulated_tvd
+        end
+    end
+
+    file = open(output_file, "w")
+    write(
+        file,
+        JSON.json(Dict(
+            "K" => K,
+            "M" => M,
+            "path_length" => path_length,
+            "num_trials" => num_trials,
+            "z0_values" => z₀_values,
+            "lambda_values" => λ_values,
+            "results" => tvd_results
+        ))
+    )
+    close(file)
+end
+
 struct MLEModel{T<:Real}
     model::Type
     K::T

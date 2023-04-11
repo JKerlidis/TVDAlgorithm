@@ -6,6 +6,18 @@ import .Simulations
 import TVDAlgorithm
 import Random
 
+# Test the impact of changing z₀ and λ on the TVD
+Simulations.zero_inflation_tvd_simulation(
+    Random.Xoshiro(7465),
+    100,
+    2,
+    1,
+    1000000,
+    [i for i ∈ 1:100],
+    [i for i ∈ 2.0:0.1:3.0],
+    "out/data/tvd_poisson_offspring_zero_inflation.json"
+)
+
 rng = Random.Xoshiro(415)
 K_vals = [i for i ∈ 10:10:200]
 path_length = 50
@@ -17,8 +29,8 @@ Simulations.tvd_simulation(
     K_vals,
     path_length,
     num_trials,
-    TVDAlgorithm.CBPKPoissonOffspring(1),
-    TVDAlgorithm.PSDBPMatchingKPoissonOffspring(1),
+    TVDAlgorithm.CBPKPoissonOffspring(100, 2, 2.5),
+    TVDAlgorithm.PSDBPMatchingKPoissonOffspring(100, 2, 2.5),
     "K",
     "out/data/tvd_poisson_offspring_z0_is_K.json"
 )
@@ -29,8 +41,8 @@ Simulations.tvd_simulation(
     K_vals,
     path_length,
     num_trials,
-    TVDAlgorithm.CBPKPoissonOffspring(1),
-    TVDAlgorithm.PSDBPMatchingKPoissonOffspring(1),
+    TVDAlgorithm.CBPKPoissonOffspring(100, 2, 2.5),
+    TVDAlgorithm.PSDBPMatchingKPoissonOffspring(100, 2, 2.5),
     1,
     "out/data/tvd_poisson_offspring_z0_is_1.json"
 )
@@ -41,8 +53,8 @@ Simulations.tvd_simulation(
     K_vals,
     path_length,
     num_trials,
-    TVDAlgorithm.CBPKPoissonOffspring(1),
-    TVDAlgorithm.PSDBPMatchingKPoissonOffspring(1, true),
+    TVDAlgorithm.CBPKPoissonOffspring(100, 2, 2.5),
+    TVDAlgorithm.PSDBPMatchingKPoissonOffspring(100, 2, 2.5, true),
     1,
     "out/data/tvd_poisson_offspring_mean_only_z0_is_1.json"
 )
