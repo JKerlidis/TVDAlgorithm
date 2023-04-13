@@ -65,8 +65,8 @@ tvd_results_mean_only_z0_is_1 = Unmarshal.unmarshal(
 
 zero_inflation_plot = plot(
     1:100,
-    i -> zero_inflation_tvd_results.results[6, i],
-    title="Estimated one-step TVD over z₀, for K=100, M=2, and λ=2.5",
+    i -> zero_inflation_tvd_results.results[11, i],
+    title="Estimated one-step TVD over z₀, for K=100, M=2, and λ=3",
     xlabel="Initial population size (z₀)",
     ylabel="Estimated TVD",
     linecolor=:purple,
@@ -77,7 +77,7 @@ zero_inflation_plot = plot(
     tickfontsize=16,
     guidefontsize=16,
     size=(1400, 1000),
-    ylims=(0, 0.05),
+    ylims=(0, 0.08),
     bottom_margin=12mm,
     left_margin=12mm,
     top_margin=3mm
@@ -138,7 +138,7 @@ path_length_plot = plot(
     tickfontsize=16,
     guidefontsize=16,
     size=(1400, 1000),
-    ylims=(0, 0.14),
+    ylims=(0, 0.18),
     bottom_margin=12mm,
     left_margin=12mm,
     top_margin=3mm
@@ -165,7 +165,7 @@ comparative_path_length_plot = plot(
     tickfontsize=16,
     guidefontsize=16,
     size=(1400, 1000),
-    ylims=(0, 0.14),
+    ylims=(0, 0.18),
     bottom_margin=12mm,
     left_margin=12mm,
     top_margin=3mm
@@ -216,7 +216,7 @@ K_plot = plot(
     guidefontsize=16,
     size=(1400, 1000),
     xticks=0:20:200,
-    ylims=(0, 0.35),
+    ylims=(0, 0.45),
     fillcolour=:thistle,
     fillalpha=0.4,
     bottom_margin=12mm,
@@ -246,7 +246,7 @@ comparative_K_plot = plot(
     tickfontsize=16,
     guidefontsize=16,
     size=(1400, 1000),
-    ylims=(0, 0.35),
+    ylims=(0, 0.45),
     bottom_margin=12mm,
     left_margin=12mm,
     top_margin=3mm
@@ -309,7 +309,7 @@ K_plot_multiple_path_lengths = plot(
     guidefontsize=16,
     size=(1400, 1000),
     xticks=0:20:200,
-    ylims=(0, 0.4),
+    ylims=(0, 0.45),
     palette=palette([:purple, :lavender, :skyblue, :olivedrab], 8),
     fillalpha=0.4,
     bottom_margin=12mm,

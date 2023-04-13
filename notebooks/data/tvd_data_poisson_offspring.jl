@@ -29,8 +29,8 @@ Simulations.tvd_simulation(
     K_vals,
     path_length,
     num_trials,
-    TVDAlgorithm.CBPKPoissonOffspring(100, 2, 2.5),
-    TVDAlgorithm.PSDBPMatchingKPoissonOffspring(100, 2, 2.5),
+    TVDAlgorithm.CBPKPoissonOffspring(100, 2, 3.0),
+    TVDAlgorithm.PSDBPMatchingKPoissonOffspring(100, 2, 3.0),
     "K",
     "out/data/tvd_poisson_offspring_z0_is_K.json"
 )
@@ -41,8 +41,8 @@ Simulations.tvd_simulation(
     K_vals,
     path_length,
     num_trials,
-    TVDAlgorithm.CBPKPoissonOffspring(100, 2, 2.5),
-    TVDAlgorithm.PSDBPMatchingKPoissonOffspring(100, 2, 2.5),
+    TVDAlgorithm.CBPKPoissonOffspring(100, 2, 3.0),
+    TVDAlgorithm.PSDBPMatchingKPoissonOffspring(100, 2, 3.0),
     1,
     "out/data/tvd_poisson_offspring_z0_is_1.json"
 )
@@ -53,8 +53,8 @@ Simulations.tvd_simulation(
     K_vals,
     path_length,
     num_trials,
-    TVDAlgorithm.CBPKPoissonOffspring(100, 2, 2.5),
-    TVDAlgorithm.PSDBPMatchingKPoissonOffspring(100, 2, 2.5, true),
+    TVDAlgorithm.CBPKPoissonOffspring(100, 2, 3.0),
+    TVDAlgorithm.PSDBPMatchingKPoissonOffspring(100, 2, 3.0, true),
     1,
     "out/data/tvd_poisson_offspring_mean_only_z0_is_1.json"
 )
