@@ -3,7 +3,7 @@
 # and such that the mean and variance of the one-step distributions match that
 # of the CBPKGeometricOffspring model. If `mean_only` is set to true, only the
 # mean will be made to match
-struct PSDBPMatchingKGeometricOffspring{T<:Real} <: TypedBranchingProcess{T}
+struct PSDBPMatchingKGeometricOffspring{T<:Real} <: TypedKBranchingProcess{T}
     K::T
     M::Integer
     max_z::Integer

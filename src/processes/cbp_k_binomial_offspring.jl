@@ -2,7 +2,7 @@
 # q ∈ ℕ₁, m ∈ [0,1], and Bin(z+K, p(z)) control function, K ∈ ℕ₁ the carrying
 # capacity of the model, and p(z) = (m-1)K / ((m-2)z + mK) is a decreasing
 # function of z that ensures that K is indeed a carrying capacity
-struct CBPKBinomialOffspring{T<:Integer} <: TypedBranchingProcess{T}
+struct CBPKBinomialOffspring{T<:Integer} <: TypedKBranchingProcess{T}
     K::T
     m::Integer
     q::Float64

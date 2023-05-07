@@ -12,13 +12,15 @@ export
 
     # Branching processes
     BranchingProcess,
-    TypedBranchingProcess,
+    TypedKBranchingProcess,
     CBPKBinomialOffspring,
     CBPKGeometricOffspring,
     CBPKPoissonOffspring,
+    CBPSMPoissonOffspring,
     PSDBPMatchingKBinomialOffspring,
     PSDBPMatchingKGeometricOffspring,
     PSDBPMatchingKPoissonOffspring,
+    PSDBPMatchingSMPoissonOffspring,
     substitute_K,
     transition_probabilities,
     log_likelihood,

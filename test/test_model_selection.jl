@@ -39,9 +39,9 @@ end
       # version of `maximise_likelihood_in_K`, and analagously for floating-point
       # valued branching processes
       @test select_model_in_K(Xoshiro(1), transition_probabilities(psdbp_bin), psdbp_bin, cbp_bin, 30) isa
-            TypedBranchingProcess{Int}
+            TypedKBranchingProcess{Int}
       @test select_model_in_K(Xoshiro(1), transition_probabilities(psdbp_poi), psdbp_poi, cbp_poi, 30) isa
-            TypedBranchingProcess{Float64}
+            TypedKBranchingProcess{Float64}
 end
 
 end

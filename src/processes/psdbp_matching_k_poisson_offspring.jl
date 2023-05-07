@@ -3,7 +3,7 @@
 # and such that the mean and variance of the one-step distributions match that
 # of the CBPKPoissonOffspring model. If `mean_only` is set to true, only the
 # mean will be made to match
-struct PSDBPMatchingKPoissonOffspring{T<:Real} <: TypedBranchingProcess{T}
+struct PSDBPMatchingKPoissonOffspring{T<:Real} <: TypedKBranchingProcess{T}
     K::T
     M::Integer
     λ::Float64

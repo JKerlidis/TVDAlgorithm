@@ -4,7 +4,7 @@
 # of observing a given set of data, as well as the negative log-likelihood of
 # this maximising likelihood
 function (maximise_likelihood_in_K(
-    d::TypedBranchingProcess{T},
+    d::TypedKBranchingProcess{T},
     path::Vector{Int},
     min_K::Integer=1,
     max_K::Integer=400
@@ -38,7 +38,7 @@ end
 # the likelihood of observaing a given set of data, as well as the negative
 # log-likelihood of this maximising likelihood
 function maximise_likelihood_in_K(
-    d::TypedBranchingProcess{Float64},
+    d::TypedKBranchingProcess{Float64},
     path::Vector{Int},
     min_K::Integer=1,
     max_K::Integer=400

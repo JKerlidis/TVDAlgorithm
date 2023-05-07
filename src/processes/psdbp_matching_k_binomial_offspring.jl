@@ -2,7 +2,7 @@
 # offspring distribution such that the PSDBP has a carrying capacity of K ∈ ℕ₁,
 # and such that the mean and variance of the one-step distributions match that
 # of the CBPKBinomialOffspring model
-struct PSDBPMatchingKBinomialOffspring{T<:Integer} <: TypedBranchingProcess{T}
+struct PSDBPMatchingKBinomialOffspring{T<:Integer} <: TypedKBranchingProcess{T}
     K::T
     m::Integer
     q::Float64

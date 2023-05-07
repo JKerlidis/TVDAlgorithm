@@ -16,8 +16,8 @@ psdbp_mle_num_correct = Simulations.mle_simulation(
     K_vals,
     path_length,
     num_trials,
-    TVDAlgorithm.PSDBPMatchingKPoissonOffspring(100.0, 2, 2.5),
-    TVDAlgorithm.CBPKPoissonOffspring(100.0, 2, 2.5),
+    TVDAlgorithm.PSDBPMatchingKPoissonOffspring(100.0, 2, 3.0),
+    TVDAlgorithm.CBPKPoissonOffspring(100.0, 2, 3.0),
     1,
     "out/data/mle_float_poisson_offspring_psdbp_true.json"
 )
@@ -28,8 +28,8 @@ cbp_mle_num_correct = Simulations.mle_simulation(
     K_vals,
     path_length,
     num_trials,
-    TVDAlgorithm.CBPKPoissonOffspring(100.0, 2, 2.5),
-    TVDAlgorithm.PSDBPMatchingKPoissonOffspring(100.0, 2, 2.5),
+    TVDAlgorithm.CBPKPoissonOffspring(100.0, 2, 3.0),
+    TVDAlgorithm.PSDBPMatchingKPoissonOffspring(100.0, 2, 3.0),
     1,
     "out/data/mle_float_poisson_offspring_cbp_true.json"
 )
