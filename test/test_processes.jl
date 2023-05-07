@@ -49,7 +49,7 @@ end
     @test round(transition_probabilities(cbp_poi)[3, 2], digits=3) == 0.048
     @test round(transition_probabilities(psdbp_poi)[3, 2], digits=3) == 0.045
     @test round(transition_probabilities(cbp_sm_poi)[3, 2], digits=3) == 0.099
-    @test round(transition_probabilities(psdbp_sm_poi)[3, 2], digits=3) == 0.250
+    @test round(transition_probabilities(psdbp_sm_poi)[3, 2], digits=3) == 0.125
 end
 
 @testset "Test log_likelihood function" begin
@@ -85,7 +85,7 @@ end
     @test round(log_likelihood(cbp_poi, [2, 1]), digits=5) == round(log(0.0479528), digits=5)
     @test round(log_likelihood(psdbp_poi, [2, 1]), digits=5) == round(log(0.0451485), digits=5)
     @test round(log_likelihood(cbp_sm_poi, [2, 1]), digits=5) == round(log(0.0990270), digits=5)
-    @test round(log_likelihood(psdbp_sm_poi, [2, 1]), digits=5) == round(log(0.2500000), digits=5)
+    @test round(log_likelihood(psdbp_sm_poi, [2, 1]), digits=5) == round(log(0.1250000), digits=5)
 end
 
 end
