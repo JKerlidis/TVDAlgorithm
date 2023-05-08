@@ -5,9 +5,54 @@ import Random
 import ProgressMeter
 import JSON
 
+# Simulate the TVD between the CBP over different path lengths
+function tvd_z₀_simulation(
+    rng::Random.AbstractRNG,
+    z₀_list::Vector{<:Integer},
+    path_length::Integer,
+    num_trials::Integer,
+    cbp_distribution::TVDAlgorithm.BranchingProcess,
+    psdbp_distribution::TVDAlgorithm.BranchingProcess,
+    output_file::String
+)
+    tvd_results = []
+
+    println("Calculating transition probabilities")
+    cbp_transition_probs = TVDAlgorithm.transition_probabilities(cbp_distribution)
+    psdbp_transition_probs = TVDAlgorithm.transition_probabilities(psdbp_distribution)
+
+    for z₀ ∈ z₀_list
+        println("Simulating TVD for z₀ = ", z₀)
+
+        simulation_output = TVDAlgorithm.approximate_tvd_extended_output(
+            rng,
+            num_trials,
+            z₀,
+            path_length,
+            psdbp_transition_probs,
+            cbp_transition_probs
+        )
+
+        tvd_results = tvd_results == [] ? simulation_output : [tvd_results simulation_output]
+    end
+
+    file = open(output_file, "w")
+    write(
+        file,
+        JSON.json(Dict(
+            "z₀_list" => z₀_list,
+            "path_lengths" => [i for i ∈ 1:path_length],
+            "num_trials" => num_trials,
+            "results" => tvd_results
+        ))
+    )
+    close(file)
+end
+
+
 # Simulate the TVD between the CBP and PSDBP over different carrying capacities
 # (K) and different path lengths
-function tvd_simulation(
+function tvd_K_simulation(
     rng::Random.AbstractRNG,
     K_vals::Vector{<:Integer},
     path_length::Integer,
@@ -65,7 +110,7 @@ end
 # Specifically for the CBPKPoissonOffspring model and corresponding PSDBP,
 # simulate the effect of varying the initial population size and the level of
 # zero-inflation (which increases as λ does) on the TVD
-function zero_inflation_tvd_simulation(
+function zero_inflation_tvd_K_simulation(
     rng::Random.AbstractRNG,
     K::Integer,
     M::Integer,

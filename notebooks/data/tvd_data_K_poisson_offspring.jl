@@ -1,4 +1,4 @@
-module TVDDataPoissonOffspring
+module TVDDataKPoissonOffspring
 
 include("./simulations.jl")
 
@@ -7,7 +7,7 @@ import TVDAlgorithm
 import Random
 
 # Test the impact of changing z₀ and λ on the TVD
-Simulations.zero_inflation_tvd_simulation(
+Simulations.zero_inflation_tvd_K_simulation(
     Random.Xoshiro(7465),
     100,
     2,
@@ -24,7 +24,7 @@ path_length = 50
 num_trials = 1000000
 
 # TVD simulation with z₀ = K
-Simulations.tvd_simulation(
+Simulations.tvd_K_simulation(
     rng,
     K_vals,
     path_length,
@@ -36,7 +36,7 @@ Simulations.tvd_simulation(
 )
 
 # TVD simulation with z₀ = 1
-Simulations.tvd_simulation(
+Simulations.tvd_K_simulation(
     rng,
     K_vals,
     path_length,
@@ -48,7 +48,7 @@ Simulations.tvd_simulation(
 )
 
 # TVD simulation with z₀ = 1 and processes matching in mean only
-Simulations.tvd_simulation(
+Simulations.tvd_K_simulation(
     rng,
     K_vals,
     path_length,

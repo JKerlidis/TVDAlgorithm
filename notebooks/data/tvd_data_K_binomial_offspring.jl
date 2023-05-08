@@ -1,4 +1,4 @@
-module TVDDataBinomialOffsring
+module TVDDataKBinomialOffsring
 
 include("./simulations.jl")
 
@@ -12,7 +12,7 @@ path_length = 50
 num_trials = 1000000
 
 # TVD simulation with z₀ = 1
-Simulations.tvd_simulation(
+Simulations.tvd_K_simulation(
     rng,
     K_vals,
     path_length,
@@ -24,7 +24,7 @@ Simulations.tvd_simulation(
 )
 
 # TVD simulation with z₀ = K
-Simulations.tvd_simulation(
+Simulations.tvd_K_simulation(
     rng,
     K_vals,
     path_length,

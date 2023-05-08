@@ -1,4 +1,4 @@
-module MLEPlotsGeometricOffspring
+module MLEPlotsKGeometricOffspring
 
 using Pkg
 Pkg.activate(".")

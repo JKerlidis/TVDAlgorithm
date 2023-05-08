@@ -1,4 +1,4 @@
-module MLEFloatPoissonOffspring
+module MLEKPoissonOffspring
 
 include("./simulations.jl")
 

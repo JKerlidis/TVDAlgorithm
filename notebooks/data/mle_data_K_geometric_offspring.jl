@@ -1,4 +1,4 @@
-module MLEIntGeometricOffspring
+module MLEKGeometricOffspring
 
 include("./simulations.jl")
 
