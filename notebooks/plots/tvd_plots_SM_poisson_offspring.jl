@@ -28,21 +28,21 @@ tvd_results = Unmarshal.unmarshal(
 path_length_plot = plot(
     1:50,
     i -> tvd_results.results[i, 1].mean,
-    title="Estimated TVD over different path lengths, for z₀=1",
+    title="Estimated TVD over different path lengths, for z₀ = 1",
     xlabel="Path length",
     ylabel="Estimated TVD",
     linecolor=:purple,
     linealpha=0.9,
-    linewidth=2,
+    linewidth=3,
     legend=false,
-    titlefontsize=24,
-    tickfontsize=16,
-    guidefontsize=16,
-    size=(1400, 1000),
+    titlefontsize=48,
+    tickfontsize=32,
+    guidefontsize=42,
+    size=(2800, 2000),
     ylims=(0, 0.2),
-    bottom_margin=12mm,
-    left_margin=12mm,
-    top_margin=3mm
+    bottom_margin=28mm,
+    left_margin=28mm,
+    top_margin=6mm
 )
 
 savefig(path_length_plot, "out/plots/poisson_offspring_SM/tvd_path_length.png")
@@ -65,22 +65,22 @@ comparative_path_length_plot = plot(
     xlabel="Path length",
     ylabel="Estimated TVD",
     linealpha=0.9,
-    linewidth=2,
+    linewidth=3,
     legend=:bottomright,
     labels=hcat("z₀ = 1", "z₀ = 2", "z₀ = 3", "z₀ = 4", "z₀ = 5", "z₀ = 10",
         "z₀ = 20", "z₀ = 30", "z₀ = 40", "z₀ = 50"),
-    legendfontsize=16,
-    titlefontsize=24,
-    tickfontsize=16,
-    guidefontsize=16,
-    size=(1400, 1000),
+    legendfontsize=32,
+    titlefontsize=48,
+    tickfontsize=32,
+    guidefontsize=42,
+    size=(2800, 2000),
     xticks=0:20:200,
     ylims=(0, 0.2),
     palette=palette([:purple, :thistle, :skyblue, :olivedrab], 10),
     fillalpha=0.4,
-    bottom_margin=12mm,
-    left_margin=12mm,
-    top_margin=3mm
+    bottom_margin=28mm,
+    left_margin=28mm,
+    top_margin=6mm
 )
 
 savefig(comparative_path_length_plot, "out/plots/poisson_offspring_SM/tvd_path_length_comparative.png")
@@ -94,16 +94,16 @@ z₀_plot = plot(
     ylabel="Estimated TVD",
     linecolor=:purple,
     linealpha=0.9,
-    linewidth=2,
+    linewidth=3,
     legend=false,
-    titlefontsize=24,
-    tickfontsize=16,
-    guidefontsize=16,
-    size=(1400, 1000),
+    titlefontsize=48,
+    tickfontsize=32,
+    guidefontsize=42,
+    size=(2800, 2000),
     ylims=(0, 0.1),
-    bottom_margin=12mm,
-    left_margin=12mm,
-    top_margin=3mm
+    bottom_margin=28mm,
+    left_margin=28mm,
+    top_margin=6mm
 )
 
 savefig(path_length_plot, "out/plots/poisson_offspring_SM/tvd_z0.png")
@@ -123,25 +123,27 @@ comparative_z₀_plot = plot(
     ],
     1:30,
     title="Estimated TVD over different z₀, for various path lengths",
-    xlabel="Path length",
+    xlabel="z₀",
     ylabel="Estimated TVD",
     linealpha=0.9,
-    linewidth=2,
+    linewidth=3,
     legend=:topright,
     labels=hcat("path length 1", "path length 5", "path length 10", "path length 15", "path length 20",
         "path length 25", "path length 30", "path length 35", "path length 40"),
-    legendfontsize=16,
-    titlefontsize=24,
-    tickfontsize=16,
-    guidefontsize=16,
-    size=(1400, 1000),
+    legendfontsize=32,
+    titlefontsize=48,
+    tickfontsize=32,
+    guidefontsize=42,
+    size=(2800, 2000),
     xticks=0:20:200,
     ylims=(0, 0.2),
     palette=palette([:purple, :thistle, :skyblue, :olivedrab], 9),
     fillalpha=0.4,
-    bottom_margin=12mm,
-    left_margin=12mm,
-    top_margin=3mm
+    bottom_margin=28mm,
+    left_margin=28mm,
+    top_margin=6mm
 )
 
 savefig(comparative_z₀_plot, "out/plots/poisson_offspring_SM/tvd_z0_comparative.png")
+
+end

@@ -66,21 +66,20 @@ tvd_results_mean_only_z0_is_1 = Unmarshal.unmarshal(
 zero_inflation_plot = plot(
     1:100,
     i -> zero_inflation_tvd_results.results[11, i],
-    title="Estimated one-step TVD over z₀, for K=100, M=2, and λ=3",
-    xlabel="Initial population size (z₀)",
-    ylabel="Estimated TVD",
-    linecolor=:purple,
+    title="Estimated one-step TVD over z_0, for K=100, M=2, and λ=3",
+    xlabel="Initial population size",
+    ylabel="Estimated TVD", linecolor=:purple,
     linealpha=0.9,
-    linewidth=2,
+    linewidth=3,
     legend=false,
-    titlefontsize=24,
-    tickfontsize=16,
-    guidefontsize=16,
-    size=(1400, 1000),
+    titlefontsize=48,
+    tickfontsize=32,
+    guidefontsize=42,
+    size=(2800, 2000),
     ylims=(0, 0.08),
-    bottom_margin=12mm,
-    left_margin=12mm,
-    top_margin=3mm
+    bottom_margin=28mm,
+    left_margin=28mm,
+    top_margin=6mm
 )
 
 savefig(zero_inflation_plot, "out/plots/poisson_offspring/zero_inflation.png")
@@ -100,26 +99,26 @@ zero_inflation_comparative_plot = plot(
         i -> zero_inflation_tvd_results.results[10, i],
         i -> zero_inflation_tvd_results.results[11, i],
     ],
-    title="Estimated one-step TVD over z₀, for K=100, M=2, and various λ",
-    xlabel="Initial population size (z₀)",
+    title="Estimated one-step TVD over z_0, for K=100, M=2, and various λ",
+    xlabel="Initial population size",
     ylabel="Estimated TVD",
     linealpha=0.9,
-    linewidth=2,
+    linewidth=3,
     legend=:topright,
     labels=hcat("λ=2.0", "λ=2.1", "λ=2.2", "λ=2.3", "λ=2.4", "λ=2.5",
         "λ=2.6", "λ=2.7", "λ=2.8", "λ=2.9", "λ=3.0"),
-    legendfontsize=16,
-    titlefontsize=24,
-    tickfontsize=16,
-    guidefontsize=16,
-    size=(1400, 1000),
+    legendfontsize=32,
+    titlefontsize=48,
+    tickfontsize=32,
+    guidefontsize=42,
+    size=(2800, 2000),
     xticks=0:20:200,
     ylims=(0, 0.08),
-    palette=palette([:purple, :lavender, :skyblue, :olivedrab], 11),
+    palette=palette([:purple, :thistle, :skyblue, :olivedrab], 11),
     fillalpha=0.4,
-    bottom_margin=12mm,
-    left_margin=12mm,
-    top_margin=3mm
+    bottom_margin=28mm,
+    left_margin=28mm,
+    top_margin=6mm
 )
 
 savefig(zero_inflation_comparative_plot, "out/plots/poisson_offspring/zero_inflation_comparative.png")
@@ -132,16 +131,16 @@ path_length_plot = plot(
     ylabel="Estimated TVD",
     linecolor=:purple,
     linealpha=0.9,
-    linewidth=2,
+    linewidth=3,
     legend=false,
-    titlefontsize=24,
-    tickfontsize=16,
-    guidefontsize=16,
-    size=(1400, 1000),
+    titlefontsize=48,
+    tickfontsize=32,
+    guidefontsize=42,
+    size=(2800, 2000),
     ylims=(0, 0.18),
-    bottom_margin=12mm,
-    left_margin=12mm,
-    top_margin=3mm
+    bottom_margin=28mm,
+    left_margin=28mm,
+    top_margin=6mm
 )
 
 savefig(path_length_plot, "out/plots/poisson_offspring/tvd_path_length.png")
@@ -157,18 +156,18 @@ comparative_path_length_plot = plot(
     ylabel="Estimated TVD",
     linecolor=[:purple :thistle4],
     linealpha=0.9,
-    linewidth=2,
+    linewidth=3,
     legend=:topleft,
     labels=["z₀ = 1" "z₀ = 100"],
-    legendfontsize=16,
-    titlefontsize=24,
-    tickfontsize=16,
-    guidefontsize=16,
-    size=(1400, 1000),
+    legendfontsize=32,
+    titlefontsize=48,
+    tickfontsize=32,
+    guidefontsize=42,
+    size=(2800, 2000),
     ylims=(0, 0.18),
-    bottom_margin=12mm,
-    left_margin=12mm,
-    top_margin=3mm
+    bottom_margin=28mm,
+    left_margin=28mm,
+    top_margin=6mm
 )
 
 savefig(comparative_path_length_plot, "out/plots/poisson_offspring/tvd_path_length_comparative.png")
@@ -184,18 +183,18 @@ mean_only_path_length_plot = plot(
     ylabel="Estimated TVD",
     linecolor=[:purple :thistle4],
     linealpha=0.9,
-    linewidth=2,
+    linewidth=3,
     legend=:topleft,
     labels=["mean and variance matching" "mean matching only"],
-    legendfontsize=16,
-    titlefontsize=24,
-    tickfontsize=16,
-    guidefontsize=16,
-    size=(1400, 1000),
+    legendfontsize=32,
+    titlefontsize=48,
+    tickfontsize=32,
+    guidefontsize=42,
+    size=(2800, 2000),
     ylims=(0, 0.7),
-    bottom_margin=12mm,
-    left_margin=12mm,
-    top_margin=3mm
+    bottom_margin=28mm,
+    left_margin=28mm,
+    top_margin=6mm
 )
 
 savefig(mean_only_path_length_plot, "out/plots/poisson_offspring/tvd_path_length_mean_only.png")
@@ -209,19 +208,19 @@ K_plot = plot(
     ylabel="Estimated TVD",
     linecolor=:purple,
     linealpha=0.9,
-    linewidth=2,
+    linewidth=3,
     legend=false,
-    titlefontsize=24,
-    tickfontsize=16,
-    guidefontsize=16,
-    size=(1400, 1000),
+    titlefontsize=48,
+    tickfontsize=32,
+    guidefontsize=42,
+    size=(2800, 2000),
     xticks=0:20:200,
     ylims=(0, 0.45),
     fillcolour=:thistle,
     fillalpha=0.4,
-    bottom_margin=12mm,
-    left_margin=12mm,
-    top_margin=3mm
+    bottom_margin=28mm,
+    left_margin=28mm,
+    top_margin=6mm
 )
 
 savefig(K_plot, "out/plots/poisson_offspring/tvd_K.png")
@@ -238,18 +237,18 @@ comparative_K_plot = plot(
     ylabel="Estimated TVD",
     linecolor=[:purple :thistle4],
     linealpha=0.9,
-    linewidth=2,
+    linewidth=3,
     legend=:topright,
     labels=["z₀ = 1" "z₀ = K"],
-    legendfontsize=16,
-    titlefontsize=24,
-    tickfontsize=16,
-    guidefontsize=16,
-    size=(1400, 1000),
+    legendfontsize=32,
+    titlefontsize=48,
+    tickfontsize=32,
+    guidefontsize=42,
+    size=(2800, 2000),
     ylims=(0, 0.45),
-    bottom_margin=12mm,
-    left_margin=12mm,
-    top_margin=3mm
+    bottom_margin=28mm,
+    left_margin=28mm,
+    top_margin=6mm
 )
 
 savefig(comparative_K_plot, "out/plots/poisson_offspring/tvd_K_comparative.png")
@@ -266,18 +265,18 @@ mean_only_K_plot = plot(
     ylabel="Estimated TVD",
     linecolor=[:purple :thistle4],
     linealpha=0.9,
-    linewidth=2,
+    linewidth=3,
     legend=:topright,
     labels=["mean and variance matching" "mean matching only"],
-    legendfontsize=16,
-    titlefontsize=24,
-    tickfontsize=16,
-    guidefontsize=16,
-    size=(1400, 1000),
+    legendfontsize=32,
+    titlefontsize=48,
+    tickfontsize=32,
+    guidefontsize=42,
+    size=(2800, 2000),
     ylims=(0, 0.8),
-    bottom_margin=12mm,
-    left_margin=12mm,
-    top_margin=3mm
+    bottom_margin=28mm,
+    left_margin=28mm,
+    top_margin=6mm
 )
 
 savefig(mean_only_K_plot, "out/plots/poisson_offspring/tvd_K_mean_only.png")
@@ -299,22 +298,22 @@ K_plot_multiple_path_lengths = plot(
     xlabel="Carrying capacity",
     ylabel="Estimated TVD",
     linealpha=0.9,
-    linewidth=2,
+    linewidth=3,
     legend=:topright,
     labels=hcat("path length 5", "path length 10", "path length 15", "path length 20",
         "path length 25", "path length 30", "path length 35", "path length 40"),
-    legendfontsize=16,
-    titlefontsize=24,
-    tickfontsize=16,
-    guidefontsize=16,
-    size=(1400, 1000),
+    legendfontsize=32,
+    titlefontsize=48,
+    tickfontsize=32,
+    guidefontsize=42,
+    size=(2800, 2000),
     xticks=0:20:200,
     ylims=(0, 0.45),
     palette=palette([:purple, :lavender, :skyblue, :olivedrab], 8),
     fillalpha=0.4,
-    bottom_margin=12mm,
-    left_margin=12mm,
-    top_margin=3mm
+    bottom_margin=28mm,
+    left_margin=28mm,
+    top_margin=6mm
 )
 
 savefig(K_plot_multiple_path_lengths, "out/plots/poisson_offspring/tvd_K_and_path_length.png")
