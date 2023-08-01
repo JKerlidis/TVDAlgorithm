@@ -280,6 +280,6 @@ stacked_K_and_path_length_plot = plot(
 )
 
 
-savefig(stacked_K_and_path_length_plot, "out/plots/poisson_offspring/tvd_stacked_K_and_path_length_plot.png")
+savefig(stacked_K_and_path_length_plot, "out/plots/poisson_offspring/tvd_stacked_K_and_path_length_plot.pdf")
 
 end
